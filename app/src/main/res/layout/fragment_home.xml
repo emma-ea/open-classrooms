@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.MainActivity"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/ic_home_image"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_ocr"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/home_ocr_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/work_sans"
+        android:text="@string/home_day_welcome"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/ic_home_image"
+        app:layout_constraintStart_toEndOf="@id/ic_home_image"
+        app:layout_constraintTop_toTopOf="@id/ic_home_image"
+        app:layout_constraintVertical_bias="0.32" />
+
+    <TextView
+        android:id="@+id/upcoming_text"
+        style="@style/textFont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="70dp"
+        android:fontFamily="@font/work_sans_bold"
+        android:text="Upcoming"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ic_home_image" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/upcoming_times_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        tools:orientation="horizontal"
+        tools:itemCount="4"
+        tools:listitem="@layout/upcoming_time_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/upcoming_text"/>
+
+    <TextView
+        android:id="@+id/available_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Available"
+        android:layout_marginTop="22dp"
+        android:layout_marginStart="20dp"
+        style="@style/textFont"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/upcoming_times_recyclerview"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/available_classrooms_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="15dp"
+        tools:orientation="horizontal"
+        tools:itemCount="2"
+        tools:listitem="@layout/available_class_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/available_text"/>
+
+    <!--
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Book Class"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/add_ic"
+        app:layout_constraintStart_toStartOf="@+id/add_ic"
+        app:layout_constraintTop_toBottomOf="@+id/add_ic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Search for classroom"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/search_ic"
+        app:layout_constraintStart_toStartOf="@+id/search_ic"
+        app:layout_constraintTop_toBottomOf="@+id/search_ic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Time tables"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@+id/tables_ic"
+        app:layout_constraintStart_toStartOf="@+id/tables_ic"
+        app:layout_constraintTop_toBottomOf="@+id/tables_ic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Profile"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="@id/profile_ic"
+        app:layout_constraintStart_toStartOf="@id/profile_ic"
+        app:layout_constraintTop_toBottomOf="@id/profile_ic" />
+
+    <ImageView
+        android:id="@+id/search_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="236dp"
+        android:background="@drawable/ic_bg_search"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/add_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/search_ic"
+        android:background="@drawable/ic_bg_add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.303"
+        app:layout_constraintStart_toEndOf="@+id/search_ic"
+        app:layout_constraintTop_toTopOf="@+id/search_ic" />
+
+    <ImageView
+        android:id="@+id/tables_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_bg_ttable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/search_ic"
+        app:layout_constraintTop_toBottomOf="@+id/search_ic"
+        app:layout_constraintVertical_bias="0.179" />
+
+    <ImageView
+        android:id="@+id/profile_ic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:background="@drawable/ic_bg_profile"
+        app:layout_constraintStart_toEndOf="@+id/tables_ic"
+        app:layout_constraintTop_toTopOf="@+id/tables_ic" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

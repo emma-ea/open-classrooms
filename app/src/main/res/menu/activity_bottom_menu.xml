@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/home_menu"
+        android:title="Home"
+        android:icon="@drawable/ic_home" />
+
+    <item android:id="@+id/search_menu"
+        android:title="Find"
+        android:icon="@drawable/ic_search_bb" />
+
+    <item android:id="@+id/profile_menu"
+        android:title="Profile"
+        android:icon="@drawable/ic_account_circle_bb"/>
+</menu>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "786972366714",
+    "project_id": "open-classrooms-413e6",
+    "storage_bucket": "open-classrooms-413e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786972366714:android:8da3fe0aabb636202c28c3",
+        "android_client_info": {
+          "package_name": "com.oddlycoder.ocr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786972366714-sr66nji5a5p26osq3cbev42oslgjrr24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnNbAxzyv6E40RTL4mNWM1EhiJaPvKaG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786972366714-sr66nji5a5p26osq3cbev42oslgjrr24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

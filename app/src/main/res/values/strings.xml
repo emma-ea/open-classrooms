@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">OCR</string>
+    <string name="auth_button_text">Verify</string>
+    <string name="auth_code_instruction">Enter verification code sent to you...</string>
+    <string name="auth_activity_title">Open Classrooms</string>
+    <string name="main_app_title">Open Classrooms</string>
+    <string name="splash_text">class rescheduling assistant</string>
+    <string name="splash_ocr_text">-open classrooms-</string>
+    <string name="ocr_logo">ocr logo</string>
+    <string name="auth_login_note">open classrooms will need your google account to sign you up</string>
+    <string name="open_classrooms">Open Classrooms</string>
+    <string name="auth_call_to_action">class shifts makes it difficult rescheduling classes and finding empty classrooms as a course rep ? let ocr help :)</string>
+    <string name="error_sigining_in">Sorry, failed to sign you in. Try again</string>
+    <string name="sign_in_btn">sign in</string>
+    <string name="network_connection_msg">Network connection not available</string>
+    <string name="poor_net_connection_msg">Oops, you seem not to have internet connection</string>
+    <string name="home_day_welcome">Hello, it\'s [Replace with day]</string>
+    <string name="profile_text_welcome">Welcome, John</string>
+</resources>
