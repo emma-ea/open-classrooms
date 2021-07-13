@@ -3,6 +3,7 @@ package com.oddlycoder.ocr.views;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -23,9 +26,13 @@ import com.oddlycoder.ocr.R;
 import com.oddlycoder.ocr.utils.IGoogleSignOut;
 import com.oddlycoder.ocr.utils.WorldTimeApiClient;
 import com.oddlycoder.ocr.viewmodel.HomeFragmentViewModel;
+import com.oddlycoder.ocr.views.adapter.AvailableClassroomsAdapter;
+import com.oddlycoder.ocr.views.adapter.UpcomingTimeAdapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -35,6 +42,7 @@ public class HomeFragment extends Fragment {
 
     private HomeFragmentViewModel homeViewModel;
 
+    private RecyclerView mUpcomingTimes, mAvailableClassrooms;
     private TextView mHomeOCRText;
 
     @Nullable
@@ -53,6 +61,8 @@ public class HomeFragment extends Fragment {
 
         homeViewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
 
+        mAvailableClassrooms = view.findViewById(R.id.available_classrooms_recyclerview);
+        mUpcomingTimes = view.findViewById(R.id.upcoming_times_recyclerview);
         mHomeOCRText = view.findViewById(R.id.home_ocr_text);
         getDayOfWeek();
 
@@ -60,8 +70,41 @@ public class HomeFragment extends Fragment {
             FirebaseAuth.getInstance().signOut();
         });
 
+        initUpcoming();
+
+        initAvailable();
+
     }
 
+    private void initAvailable() {
+
+        String[] classrooms = {
+                "FF1", "FF2", "FF3", "FF4", "FF5", "FF6", "FF7",
+                "FF8", "FF9", "FF10"
+        };
+
+        AvailableClassroomsAdapter adapter = new AvailableClassroomsAdapter(new ArrayList<>(Arrays.asList(classrooms)));
+        mAvailableClassrooms.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        mAvailableClassrooms.setAdapter(adapter);
+    }
+
+    private void initUpcoming() {
+        //TODO: replace with data from firebase
+        String[] timesList = {
+                "8am - 9am",
+                "9am - 10am",
+                "10:30am - 11:30am",
+                "11:30am - 12:30pm",
+                "1pm - 2pm",
+                "2pm - 3pm",
+                "3pm - 4pm",
+                "4pm - 5pm",
+                "5pm - 6pm",
+        };
+        UpcomingTimeAdapter adapter = new UpcomingTimeAdapter(new ArrayList<>(Arrays.asList(timesList)));
+        mUpcomingTimes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        mUpcomingTimes.setAdapter(adapter);
+    }
 
     private void getDayOfWeek() {
         // if network fails.. rely on system date

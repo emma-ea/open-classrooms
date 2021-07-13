@@ -12,13 +12,15 @@
     <color name="bottom_nav_bg_tint">#F6F4F4</color>
     <color name="search_edit_text">#EBEAEF</color>
     <color name="search_item_color">#C4C4C4</color>
-    <color name="upcoming_item_border">#7E9DF4A1</color>
+    <color name="upcoming_item_border">#7E9DF4</color>
 
     <!-- classroom recycler item colors -->
     <color name="item1_bg">#9EB6FA</color>
     <color name="item1_img">#6676A5</color>
-    <color name="item2_bg">#4CAF50</color> <!-- opacity: 77% -->
+    <color name="item2_bg">#C44CAF50</color> <!-- opacity: 77% -->
     <color name="item2_img">#439B47</color>
     <color name="item3_bg">#FFA9C4</color>
     <color name="item3_img">#BE8395</color>
+
+    <color name="upcoming_selected_item">#E5E5E5</color>
 </resources>

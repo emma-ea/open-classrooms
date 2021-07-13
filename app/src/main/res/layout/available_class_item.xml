@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/available_background"
     android:layout_width="match_parent"
     android:layout_height="116dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/available_class_item_background"
     android:layout_marginBottom="21dp">
 
