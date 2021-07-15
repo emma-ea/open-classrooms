@@ -8,9 +8,14 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.oddlycoder.ocr.model.Classroom_rv;
 import com.oddlycoder.ocr.model.WorldClock;
+import com.oddlycoder.ocr.utils.FirestoreProducer;
+import com.oddlycoder.ocr.utils.FirestoreService;
 import com.oddlycoder.ocr.utils.NetworkConnection;
 import com.oddlycoder.ocr.utils.WorldTimeApiClient;
+
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -53,4 +58,21 @@ public class Repository implements IRepository {
         return this.clock;
 
     }
+
+    public void getClassroom() {
+        FirestoreService fs = new FirestoreService();
+        fs.getClassroom();
+        Log.d(TAG, "getClassroom: repository");
+    }
+
+    public LiveData<List<Classroom_rv>> getClassroomData() {
+        return FirestoreProducer.fetchClassrooms();
+    }
+
+    public void googleAuthService() {
+
+    }
 }
+
+
+

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.oddlycoder.ocr.R;
@@ -127,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
         if (message.isEmpty())
             message = getString(R.string.error_sigining_in);
         Snackbar.make(mParentLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    public void signOut() {
+        AuthActivity.authActivity().googleSignOut();
     }
 
     public static Intent start(Context ctx) { return new Intent(ctx, MainActivity.class); }

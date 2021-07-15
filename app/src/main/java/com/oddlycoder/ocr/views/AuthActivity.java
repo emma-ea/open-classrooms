@@ -54,11 +54,15 @@ public class AuthActivity extends AppCompatActivity implements IGoogleSignOut {
 
     private AuthViewModel authViewModel;
 
+    private static AuthActivity instance;
+
     public AuthActivity() { super(R.layout.activity_auth); }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        instance = this;
 
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
@@ -183,7 +187,16 @@ public class AuthActivity extends AppCompatActivity implements IGoogleSignOut {
 
     @Override
     public void googleSignOut() {
-        GoogleSignIn.getClient(this, gso).signOut();
+        // disconnect app user google account
+        GoogleSignIn.getClient(this, gso).signOut()
+                .addOnCompleteListener((listener) -> {
+                    mAuth.signOut();
+                    Log.d(TAG, "googleSignOut: user account disconnected.");
+                });
+    }
+
+    public static AuthActivity authActivity() {
+        return instance;
     }
 
     /*    //TODO: testing activity result launcher. remove if it works.
