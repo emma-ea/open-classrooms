@@ -16,11 +16,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WorldTimeApiClient implements Callback<WorldClock> {
 
-    public static final String TAG = "com.oddlycoder.ocr";
+    public static final String TAG = "WorldTimeApiClient";
     public static final String BASE_URL = "http://worldclockapi.com/";
 
     private final IWorldTime service;
     private final Context context;
+
+    private Repository repo;
 
     public WorldTimeApiClient(Context context) {
         this.context = context;
@@ -40,7 +42,7 @@ public class WorldTimeApiClient implements Callback<WorldClock> {
     @Override
     public void onResponse(Call<WorldClock> call, Response<WorldClock> response) {
         if (response.isSuccessful() && response.body() != null) {
-            Repository repo = Repository.initialize(context);
+            repo = Repository.get();
             repo.fetchTime(response.body());
             Log.i(TAG, "onResponse: clock day: " + response.body().getDayOfTheWeek());
         } else {

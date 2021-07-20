@@ -4,24 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class Classroom {
 
     private String classroom;
 
-    // key - days
-    // value -- hours
-    private List<Map<String, TTable>> ttables;
-
-    public List<Map<String, TTable>> getTtables() {
-        return ttables;
-    }
-
-    public void setTtables(List<Map<String, TTable>> ttables) {
-        this.ttables = ttables;
-    }
+    private List<Day> week; // days -- 5
 
     public String getClassroom() {
         return classroom;
@@ -31,9 +20,17 @@ public class Classroom {
         this.classroom = classroom;
     }
 
+    public List<Day> getWeek() {
+        return week;
+    }
+
+    public void setWeek(List<Day> week) {
+        this.week = week;
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(classroom, ttables);
+        return Objects.hash(classroom, week);
     }
 
     @Override
@@ -44,7 +41,7 @@ public class Classroom {
             return false;
         Classroom cr = (Classroom) obj;
         return Objects.equals(classroom, cr.classroom) &&
-                Objects.equals(ttables, cr.ttables);
+                Objects.equals(week, cr.week);
     }
 
     @NonNull

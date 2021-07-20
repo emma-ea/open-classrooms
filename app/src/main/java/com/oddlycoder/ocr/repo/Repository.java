@@ -1,23 +1,18 @@
 package com.oddlycoder.ocr.repo;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.oddlycoder.ocr.model.Classroom_rv;
+import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.WorldClock;
 import com.oddlycoder.ocr.utils.FirestoreProducer;
 import com.oddlycoder.ocr.utils.FirestoreService;
-import com.oddlycoder.ocr.utils.NetworkConnection;
 import com.oddlycoder.ocr.utils.WorldTimeApiClient;
 
 import java.util.List;
-
-import retrofit2.Response;
 
 public class Repository implements IRepository {
 
@@ -27,30 +22,29 @@ public class Repository implements IRepository {
     private final Context context;
 
     private final MutableLiveData<WorldClock> clock = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> conState = new MutableLiveData<>();
+    private FirestoreService fs;
 
     private Repository(Context ctx) {
         this.context = ctx;
         WorldTimeApiClient client = new WorldTimeApiClient(ctx);
+        fs = new FirestoreService();
         client.start();
     }
 
-    public static Repository initialize(Context ctx) {
+    public static void initialize(Context ctx) {
         if (instance == null)
             instance = new Repository(ctx);
-        return instance;
+    }
+
+    public static Repository get() {
+        if (instance != null)
+            return instance;
+        throw new IllegalStateException("repository not initialized");
     }
 
     public void fetchTime(WorldClock clock) {
         Log.i(TAG, "fetchTime: ");
         this.clock.setValue(clock);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public LiveData<Boolean> getNetworkState() {
-        // TODO: return network state;
-        conState.setValue(NetworkConnection.getInstance(context).isNetworkConnected());
-        return conState;
     }
 
     @Override
@@ -59,19 +53,16 @@ public class Repository implements IRepository {
 
     }
 
-    public void getClassroom() {
-        FirestoreService fs = new FirestoreService();
-        fs.getClassroom();
+    public LiveData<List<Classroom>> getClassroom() {
         Log.d(TAG, "getClassroom: repository");
+        return fs.getClassroom();
     }
 
-    public LiveData<List<Classroom_rv>> getClassroomData() {
+    public LiveData<List<Classroom>> getClassroomData() {
         return FirestoreProducer.fetchClassrooms();
     }
 
-    public void googleAuthService() {
 
-    }
 }
 
 

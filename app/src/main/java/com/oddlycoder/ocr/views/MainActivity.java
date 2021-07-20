@@ -1,6 +1,5 @@
 package com.oddlycoder.ocr.views;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -10,37 +9,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.oddlycoder.ocr.R;
-import com.oddlycoder.ocr.repo.Repository;
-import com.oddlycoder.ocr.utils.NetworkConnection;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HomeFragment.LogoutCallback {
 
-    public static final String TAG = "com.oddlycoder.ocr";
+    public static final String TAG = "MainActivity";
+    public static final String AUTH_CONTEXT = "auth-context";
 
     private CoordinatorLayout mParentLayout;
 
-    public MainActivity() {
-        super(R.layout.activity_main);
-    }
-
     private int exitCount = 0;
+
+    private Context authContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
             homeFragment();
@@ -53,18 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //TODO seems not to work, fix later
-       /* if (!Repository.initialize(this).getNetworkState()) {
-            snackMessage(getString(R.string.poor_net_connection_msg));
-        } else {
-            Log.d(TAG, "MainActivity: started: network connection available");
-        }*/
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -130,9 +111,16 @@ public class MainActivity extends AppCompatActivity {
         Snackbar.make(mParentLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
-    public void signOut() {
-        AuthActivity.authActivity().googleSignOut();
+    public static Intent start(Context ctx) {
+        Intent i = new Intent(ctx, MainActivity.class);
+        i.putExtra(AUTH_CONTEXT,(Parcelable) ctx);
+        return i;
     }
 
-    public static Intent start(Context ctx) { return new Intent(ctx, MainActivity.class); }
+    @Override
+    public void logout() {
+        authContext = getIntent().getParcelableExtra(AUTH_CONTEXT);
+        AuthActivity activity = (AuthActivity) authContext;
+        activity.googleSignOut();
+    }
 }

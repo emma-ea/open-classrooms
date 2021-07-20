@@ -13,18 +13,7 @@ import com.oddlycoder.ocr.repo.Repository;
 
 public class AuthViewModel extends AndroidViewModel {
 
-    private final Repository repository;
-    private final LiveData<Boolean> conState;
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public AuthViewModel(@NonNull Application application) {
         super(application);
-        repository = Repository.initialize(application.getApplicationContext());
-        conState = repository.getNetworkState();
     }
-
-    public LiveData<Boolean> isNetworkConnected() {
-        return conState;
-    }
-
 }

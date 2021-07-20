@@ -58,16 +58,15 @@
         app:layout_constraintBottom_toTopOf="@id/auth_login_button"
         app:layout_constraintVertical_bias=".05"/>
 
-    <ProgressBar
-        android:id="@+id/auth_progress_circular"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="85dp"
-        android:indeterminateTint="@color/auth_button_pressed"
-        style="@style/progressStyle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+   <ProgressBar
+       android:id="@+id/auth_progress_circular"
+       android:layout_width="wrap_content"
+       app:layout_constraintBottom_toBottomOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       android:indeterminateTint="@color/upcoming_item_border"
+       android:layout_height="wrap_content"
+       android:layout_marginBottom="85dp"/>
 
     <Button
         android:id="@+id/auth_login_button"

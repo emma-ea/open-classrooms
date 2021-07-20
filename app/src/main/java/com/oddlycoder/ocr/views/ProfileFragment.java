@@ -1,6 +1,7 @@
 package com.oddlycoder.ocr.views;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import com.oddlycoder.ocr.R;
 
 public class ProfileFragment extends Fragment {
 
+    public static final String TAG = "ProfileFragment";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -24,4 +27,9 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: profile fragment");
+    }
 }

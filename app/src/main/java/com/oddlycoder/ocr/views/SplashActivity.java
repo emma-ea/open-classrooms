@@ -26,9 +26,6 @@ public class SplashActivity extends AppCompatActivity {
         makeFullScreen();
         setContentView(R.layout.activity_splash);
 
-        // TODO: switch to executors. handler is being deprecated.
-        // TODO: tried executors. overridePendingTransition not working with executors
-        // TODO: fall back to handlers until solution is found
         new Handler().postDelayed(() -> {
             startActivity(new Intent(this, AuthActivity.class));
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

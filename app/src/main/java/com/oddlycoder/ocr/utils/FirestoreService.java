@@ -2,25 +2,19 @@ package com.oddlycoder.ocr.utils;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.oddlycoder.ocr.model.Classroom_rv;
+import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Day;
 import com.oddlycoder.ocr.model.TTable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -34,18 +28,49 @@ public class FirestoreService {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public void getClassroom() {
+    private final MutableLiveData<List<Classroom>> classroomLiveData = new MutableLiveData<>();
 
-        List<Classroom_rv> classroom_rvs = new ArrayList<>();
+    public LiveData<List<Classroom>> getClassroom() {
+
+        List<Classroom> classrooms = new ArrayList<>();
 
         db.collection("classroom")
                 .get()
                 .addOnCompleteListener((task) -> {
                     if (task.isSuccessful() && task.getResult() != null) {
-                        for (DocumentSnapshot documentSnapshot : task.getResult()) {
-                           // Log.d(TAG, "onComplete: document id(name) --> " + documentSnapshot.getId());
+                        for (DocumentSnapshot documentSnapshot : task.getResult()) { // fetch classrooms
 
-                            CollectionReference colRefMonday = db.collection("classroom")
+                            Classroom classroom = new Classroom();
+                            classroom.setClassroom(documentSnapshot.getId());
+
+                            Log.d(TAG, "getClassroom: document id: " + documentSnapshot.getId());
+                            Log.d(TAG, "getClassroom: document data all: " + documentSnapshot.getData());
+                            Log.d(TAG, "getClassroom: document data keys: " + documentSnapshot.getData().keySet());
+                            Log.d(TAG, "getClassroom: document data values: " + documentSnapshot.getData().values());
+
+                            List<Day> week = new ArrayList<>();
+                            for (String key : documentSnapshot.getData().keySet()) {
+                                Day day = new Day();
+                                day.setDay(key);
+                                TTable classHour;
+                               /* for (Object hour : documentSnapshot.getData().values()) {
+                                    classHour = (TTable) hour;
+                                    day.setTtables(classHour);
+                                }*/
+                                week.add(day);
+                            }
+                            classroom.setWeek(week);
+
+                            classrooms.add(classroom);
+
+                        }
+                        classroomLiveData.postValue(classrooms);
+                    }
+                });
+
+        return classroomLiveData;
+
+                            /*CollectionReference colRefMonday = db.collection("classroom")
                                     .document(documentSnapshot.getId())
                                     .collection("Monday");
 
@@ -66,8 +91,7 @@ public class FirestoreService {
                                     .collection("Friday");
 
 
-                            BlockingQueue<CollectionReference> requestQueue =
-                                    new ArrayBlockingQueue<>(5);
+                            BlockingQueue<CollectionReference> requestQueue = new ArrayBlockingQueue<>(5);
                             requestQueue.addAll(Arrays.asList(
                                     colRefMonday,
                                     colRefTuesday,
@@ -75,9 +99,26 @@ public class FirestoreService {
                                     colRefThursday,
                                     colRefFriday));
 
-                            FirestoreProducer requestHandler = new FirestoreProducer(requestQueue);
-                            Thread thread = new Thread(requestHandler);
-                            thread.start();
+                            FirestoreProducer producer = new FirestoreProducer(requestQueue, documentSnapshot.getId());
+                            producer.Tp();*/
+
+        // Log.d(TAG, "onComplete firestoreService: document id(name) --> " + documentSnapshot.getId());
+                           /* Log.d(TAG, "getClassroom: data: --> " + documentSnapshot.getData().keySet());
+
+                            Classroom_rv c = new Classroom_rv();
+                            c.setClassroom(documentSnapshot.getId());
+
+                            List<Day> week = new ArrayList<>();
+                            for (String day : documentSnapshot.getData().keySet()) {
+                                Day d = new Day();
+                                d.setDay(day);
+                                week.add(d);
+                            }*/
+
+        //d.setDay(documentSnapshot.getData().values());
+
+                            /*new Thread(new FirestoreProducer(requestQueue, documentSnapshot.getId()))
+                                    .start();*/
 
 
                            /*  for (int i = 0; i < task.getResult().size(); i++) {
@@ -175,13 +216,7 @@ public class FirestoreService {
                                 // end of
                             }
 */
-                        }
-                    }
-                });
-
-        //TODO: have a thread pool
-        // TODO: put all request into pool
-        // TODO:
     }
+
 
 }

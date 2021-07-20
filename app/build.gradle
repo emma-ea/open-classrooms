@@ -18,6 +18,10 @@ android {
         multiDexEnabled true
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -51,6 +55,9 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation "io.reactivex.rxjava3:rxjava:3.0.13"
+
 
     testImplementation 'junit:junit:4.+'
 

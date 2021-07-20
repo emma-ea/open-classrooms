@@ -9,7 +9,6 @@ public class ApplicationContext extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        // TODO: Initialize repos
         Repository.initialize(this);
     }
 }

@@ -1,7 +1,6 @@
 package com.oddlycoder.ocr.views.adapter;
 
 import android.app.Dialog;
-import android.content.res.ColorStateList;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,26 +9,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oddlycoder.ocr.R;
+import com.oddlycoder.ocr.model.Classroom;
+import com.oddlycoder.ocr.model.Day;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableClassroomsAdapter.ViewHolder> {
 
-    private final ArrayList<String> classrooms;
+    private static List<Classroom> classrooms = null;
 
-    public AvailableClassroomsAdapter(ArrayList<String> classrooms) {
+    private static AvailableClassroomsAdapter instance = null;
+    private static int time = 0;
+
+    public AvailableClassroomsAdapter(List<Classroom> classrooms) {
         this.classrooms = classrooms;
+    }
+
+    private AvailableClassroomsAdapter(List<Classroom> classrooms, int time) {
+        AvailableClassroomsAdapter.classrooms = classrooms;
+        AvailableClassroomsAdapter.time = time;
     }
 
     @NonNull
@@ -51,6 +59,7 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
     public int getItemCount() {
         return classrooms.size();
     }
+
 
     protected static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -93,8 +102,8 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
             mAvailableIcon.setImageDrawable(itemView.getContext().getDrawable(imgColor));
         }
 
-        public void bind(String classroom) {
-            mClassroom.setText(classroom);
+        public void bind(Classroom classroom) {
+            mClassroom.setText(classroom.getClassroom());
         }
 
         @Override

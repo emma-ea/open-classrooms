@@ -35,6 +35,16 @@
         app:layout_constraintTop_toTopOf="@id/ic_home_image"
         app:layout_constraintVertical_bias="0.32" />
 
+    <ImageView
+        android:id="@+id/close_app"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_close"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -91,6 +101,16 @@
                 tools:itemCount="2"
                 tools:listitem="@layout/available_class_item"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/available_text"/>
+
+            <ProgressBar
+                android:id="@+id/recycler_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTint="@color/upcoming_item_border"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/available_text"/>
 
 

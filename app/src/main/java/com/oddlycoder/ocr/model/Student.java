@@ -7,13 +7,23 @@ public class Student {
     private String fullName;
     private String courseProgram;
     private String year;
+    private String email;
 
-    public Student(String profileImageUrl, String username, String fullName, String courseProgram, String year) {
+    public Student(String profileImageUrl, String username, String fullName, String courseProgram, String year, String email) {
         this.profileImageUrl = profileImageUrl;
         this.username = username;
         this.fullName = fullName;
         this.courseProgram = courseProgram;
         this.year = year;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getProfileImageUrl() {
