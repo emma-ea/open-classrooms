@@ -1,15 +1,12 @@
 package com.oddlycoder.ocr.views;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -19,7 +16,7 @@ import com.oddlycoder.ocr.R;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.LogoutCallback {
+public class MainActivity extends AppCompatActivity implements HomeFragment.HomeCallbacks {
 
     public static final String TAG = "MainActivity";
     public static final String AUTH_CONTEXT = "auth-context";
@@ -27,8 +24,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Logo
     private CoordinatorLayout mParentLayout;
 
     private int exitCount = 0;
-
-    private Context authContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,15 +107,25 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Logo
     }
 
     public static Intent start(Context ctx) {
-        Intent i = new Intent(ctx, MainActivity.class);
-        i.putExtra(AUTH_CONTEXT,(Parcelable) ctx);
-        return i;
+        authActivity = (AuthActivity) ctx;
+        return new Intent(ctx, MainActivity.class);
     }
+
+    private static AuthActivity authActivity;
 
     @Override
     public void logout() {
-        authContext = getIntent().getParcelableExtra(AUTH_CONTEXT);
-        AuthActivity activity = (AuthActivity) authContext;
-        activity.googleSignOut();
+        authActivity.googleSignOut();
+    }
+
+    @Override
+    public void startAuthActivity() {
+        startActivity(AuthActivity.start(this));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        authActivity = null;
     }
 }

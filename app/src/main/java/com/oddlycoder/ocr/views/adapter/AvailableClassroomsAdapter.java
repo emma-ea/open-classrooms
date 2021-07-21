@@ -1,10 +1,12 @@
 package com.oddlycoder.ocr.views.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,18 +28,10 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableClassroomsAdapter.ViewHolder> {
 
-    private static List<Classroom> classrooms = null;
-
-    private static AvailableClassroomsAdapter instance = null;
-    private static int time = 0;
+    private List<Classroom> classrooms = null;
 
     public AvailableClassroomsAdapter(List<Classroom> classrooms) {
         this.classrooms = classrooms;
-    }
-
-    private AvailableClassroomsAdapter(List<Classroom> classrooms, int time) {
-        AvailableClassroomsAdapter.classrooms = classrooms;
-        AvailableClassroomsAdapter.time = time;
     }
 
     @NonNull
@@ -53,6 +47,13 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
     public void onBindViewHolder(@NonNull AvailableClassroomsAdapter.ViewHolder holder, int position) {
         holder.viewDecorator(position);
         holder.bind(classrooms.get(position)); // TODO pass arguments
+        fadeAnimation(holder.getItemView());
+    }
+
+    private void fadeAnimation(View holder) {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0.0f, 1.0f);
+        alphaAnimation.setDuration(1000L);
+        holder.startAnimation(alphaAnimation);
     }
 
     @Override
@@ -65,17 +66,23 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
 
         private final TextView mClassroom;
         private TextView mViewCount;
+        private View itemView;
 
         private final ConstraintLayout mAvailableItemParent;
         private final ImageView mAvailableIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.itemView = itemView;
             itemView.setOnClickListener(this);
             mClassroom = itemView.findViewById(R.id.classroom_id);
             mViewCount = itemView.findViewById(R.id.classroom_view_count);
             mAvailableItemParent = itemView.findViewById(R.id.available_background);
             mAvailableIcon = itemView.findViewById(R.id.ic_class_item);
+        }
+
+        public View getItemView() {
+            return itemView;
         }
 
         public void viewDecorator(int pos) {
@@ -95,7 +102,8 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
             }
         }
 
-        private void setDecorator(@DrawableRes int bgColor,@DrawableRes int imgColor) {
+        @SuppressLint("UseCompatLoadingForDrawables")
+        private void setDecorator(@DrawableRes int bgColor, @DrawableRes int imgColor) {
             //mAvailableItemParent.setBackgroundTintList(ColorStateList.valueOf(bgColor));
             //mAvailableIcon.setBackgroundTintList(ColorStateList.valueOf(imgColor));
             mAvailableItemParent.setBackground(itemView.getContext().getDrawable(bgColor));

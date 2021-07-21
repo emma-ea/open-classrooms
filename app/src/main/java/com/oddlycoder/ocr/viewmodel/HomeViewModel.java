@@ -13,14 +13,15 @@ import com.oddlycoder.ocr.repo.Repository;
 
 import java.util.List;
 
-public class HomeFragmentViewModel extends AndroidViewModel {
+public class HomeViewModel extends AndroidViewModel {
 
     private final Repository repository;
     public static final String TAG = "HomeFragmentVM";
 
-    public HomeFragmentViewModel(@NonNull Application application) {
+    public HomeViewModel(@NonNull Application application) {
         super(application);
         repository = Repository.get();
+        repository.getTime();
     }
 
     public LiveData<WorldClock> getClock() {
@@ -30,10 +31,6 @@ public class HomeFragmentViewModel extends AndroidViewModel {
     public LiveData<List<Classroom>> sgetClassroom() {
         Log.d(TAG, "service getClassroom: view Model");
         return repository.getClassroom();
-    }
-
-    public LiveData<List<Classroom>> getClassroomData() {
-        return repository.getClassroomData();
     }
 
 }

@@ -1,5 +1,5 @@
 package com.oddlycoder.ocr.utils;
 
-public interface IGoogleSignOut {
+public interface UserSignOut {
     void googleSignOut();
 }

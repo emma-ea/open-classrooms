@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fragHomeParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.MainActivity"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    tools:context=".views.MainActivity">
 
     <ImageView
         android:id="@+id/ic_home_image"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@drawable/ic_ocr"
-        android:layout_marginTop="30dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_ocr"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/home_ocr_text"
@@ -39,11 +38,11 @@
         android:id="@+id/close_app"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@drawable/ic_close"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -64,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/work_sans_bold"
-                android:text="Upcoming"
+                android:text="@string/home_frag_upcoming"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,22 +73,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
-                tools:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/upcoming_text"
                 tools:itemCount="4"
                 tools:listitem="@layout/upcoming_time_item"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/upcoming_text"/>
+                tools:orientation="horizontal" />
 
             <TextView
                 android:id="@+id/available_text"
+                style="@style/textFont"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Available"
-                android:layout_marginTop="22dp"
                 android:layout_marginStart="20dp"
-                style="@style/textFont"
+                android:layout_marginTop="22dp"
+                android:text="@string/home_frag_available"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/upcoming_times_recyclerview"/>
+                app:layout_constraintTop_toBottomOf="@id/upcoming_times_recyclerview" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/available_classrooms_recyclerview"
@@ -97,21 +96,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="15dp"
-                tools:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/available_text"
                 tools:itemCount="2"
                 tools:listitem="@layout/available_class_item"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/available_text"/>
+                tools:orientation="horizontal" />
 
             <ProgressBar
                 android:id="@+id/recycler_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminateTint="@color/upcoming_item_border"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/available_text"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/available_text" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

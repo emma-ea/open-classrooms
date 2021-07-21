@@ -1,7 +1,7 @@
 package com.oddlycoder.ocr.views;
 
+import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -28,12 +27,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.oddlycoder.ocr.model.Student;
-import com.oddlycoder.ocr.utils.FirebaseUserSetup;
-import com.oddlycoder.ocr.utils.IGoogleSignOut;
+import com.oddlycoder.ocr.fc.FirebaseUserSetup;
+import com.oddlycoder.ocr.repo.Repository;
+import com.oddlycoder.ocr.utils.UserSignOut;
 import com.oddlycoder.ocr.R;
 import com.oddlycoder.ocr.viewmodel.AuthViewModel;
 
-public class AuthActivity extends AppCompatActivity implements IGoogleSignOut {
+public class AuthActivity extends AppCompatActivity implements UserSignOut {
 
     public static final String TAG = "AuthActivity";
 
@@ -44,6 +44,8 @@ public class AuthActivity extends AppCompatActivity implements IGoogleSignOut {
     private ConstraintLayout mParentLayout;
     private ProgressBar mProgressCircle;
     private Button mAuthButton;
+
+    private static Repository repository;
 
     private AuthViewModel authViewModel;
 
@@ -84,7 +86,7 @@ public class AuthActivity extends AppCompatActivity implements IGoogleSignOut {
     protected void onStart() {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
-        startMainActivity(user);
+        startMainActivity(user, "");
     }
 
     private void showButton() {
@@ -97,8 +99,20 @@ public class AuthActivity extends AppCompatActivity implements IGoogleSignOut {
         mProgressCircle.setVisibility(View.VISIBLE);
     }
 
-    public void startMainActivity(FirebaseUser user) {
+    public void startMainActivity(FirebaseUser user, String uuid) {
         if (user != null) {
+            if (!uuid.isEmpty()) {
+                Student student = new Student(
+                        user.getPhotoUrl().toString(),
+                        user.getDisplayName(),
+                        user.getDisplayName(),
+                        "",
+                        "",
+                        user.getEmail()
+                );
+                Log.d(TAG, "firebaseAuthWithGoogle: user not null. creating user");
+                authViewModel.setUpStudentDetail(student, uuid);
+            }
             startActivity(MainActivity.start(AuthActivity.this));
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             // TODO finish activity
@@ -149,24 +163,12 @@ public class AuthActivity extends AppCompatActivity implements IGoogleSignOut {
                         Log.d(TAG, "signInWithCredential: Success");
                         FirebaseUser user = mAuth.getCurrentUser();
                         snackMessage("Authentication successful, Please wait");
-                        if (user != null) {
-                            Student student = new Student(
-                                    user.getPhotoUrl().toString(),
-                                    user.getDisplayName(),
-                                    "",
-                                    "",
-                                    "",
-                                    user.getEmail()
-                            );
-                            Log.d(TAG, "firebaseAuthWithGoogle: user not null. creating user");
-                            new FirebaseUserSetup(idToken, student);
-                        }
-                        startMainActivity(user);
+                        startMainActivity(user, user.getUid());
                     } else {
                         Log.w(TAG, "signInWithCredential: Failure", task.getException());
                         // auth failed
                         snackMessage("");
-                        startMainActivity(null);
+                        startMainActivity(null, "");
                     }
                     showButton();
                 });
@@ -187,6 +189,10 @@ public class AuthActivity extends AppCompatActivity implements IGoogleSignOut {
                     mAuth.signOut();
                     Log.d(TAG, "googleSignOut: user account disconnected.");
                 });
+    }
+
+    public static Intent start(Context ctx) {
+        return new Intent(ctx, AuthActivity.class);
     }
 
 

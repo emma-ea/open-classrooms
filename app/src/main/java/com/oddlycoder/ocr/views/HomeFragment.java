@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -24,8 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.oddlycoder.ocr.R;
 import com.oddlycoder.ocr.model.Classroom;
-import com.oddlycoder.ocr.model.Day;
-import com.oddlycoder.ocr.viewmodel.HomeFragmentViewModel;
+import com.oddlycoder.ocr.viewmodel.HomeViewModel;
 import com.oddlycoder.ocr.views.adapter.AvailableClassroomsAdapter;
 import com.oddlycoder.ocr.views.adapter.UpcomingTimeAdapter;
 
@@ -43,7 +41,7 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = "co.oddlycoder.ocr";
 
-    private HomeFragmentViewModel homeViewModel;
+    private HomeViewModel homeViewModel;
 
     private ConstraintLayout mParent;
     private RecyclerView mUpcomingTimes, mAvailableClassrooms;
@@ -51,6 +49,9 @@ public class HomeFragment extends Fragment {
     private ProgressBar mRecyclerLoading;
 
     private AvailableClassroomsAdapter adapter = new AvailableClassroomsAdapter(Collections.emptyList());
+    private UpcomingTimeAdapter upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList());
+
+    private List<Classroom> classrooms = new ArrayList<>() ;
 
     @Nullable
     @Override
@@ -78,7 +79,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view,Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        homeViewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         mRecyclerLoading.setVisibility(View.VISIBLE);
 
@@ -87,6 +88,8 @@ public class HomeFragment extends Fragment {
 
         // tables livedata
         classroomData();
+
+        getUpcomingSelected();  // todo: filter primer
 
     }
 
@@ -100,9 +103,19 @@ public class HomeFragment extends Fragment {
 
     private void initUpcoming() {
         String[] times = getResources().getStringArray(R.array.upcoming_time);
-        UpcomingTimeAdapter adapter = new UpcomingTimeAdapter(new ArrayList<>(Arrays.asList(times)));
+        upcomingAdapter = new UpcomingTimeAdapter(new ArrayList<>(Arrays.asList(times)));
         mUpcomingTimes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        mUpcomingTimes.setAdapter(adapter);
+        mUpcomingTimes.setAdapter(upcomingAdapter);
+    }
+
+    private void getUpcomingSelected() {
+        // TODO: filter available list
+        int s = upcomingAdapter.getSelectedItem();
+        Log.d(TAG, "getUpcomingSelected: selected: " + s);
+    }
+
+    private void filterClassrooms(int byTime) {
+
     }
 
     private void classroomData() {
@@ -147,7 +160,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void logout() {
-        callback.logout();
+        callback.logout();  // todo: handle response from logout and run startAuthActivity
+        callback.startAuthActivity();
     }
 
     private void snackMessage(String message) {
@@ -156,16 +170,17 @@ public class HomeFragment extends Fragment {
         Snackbar.make(mParent, message, Snackbar.LENGTH_LONG).show();
     }
 
-    interface LogoutCallback {
+    interface HomeCallbacks {
         void logout();
+        void startAuthActivity();
     }
 
-    private LogoutCallback callback = null;
+    private HomeCallbacks callback = null;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        callback = (LogoutCallback) context;
+        callback = (HomeCallbacks) context;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.oddlycoder.ocr.utils;
+package com.oddlycoder.ocr.fc;
 
 import android.util.Log;
 

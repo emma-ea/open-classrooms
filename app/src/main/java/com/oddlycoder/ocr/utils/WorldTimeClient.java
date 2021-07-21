@@ -14,18 +14,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class WorldTimeApiClient implements Callback<WorldClock> {
+public class WorldTimeClient {
 
     public static final String TAG = "WorldTimeApiClient";
     public static final String BASE_URL = "http://worldclockapi.com/";
 
     private final IWorldTime service;
-    private final Context context;
 
-    private Repository repo;
-
-    public WorldTimeApiClient(Context context) {
-        this.context = context;
+    public WorldTimeClient() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().create()))
@@ -33,26 +29,9 @@ public class WorldTimeApiClient implements Callback<WorldClock> {
         service = retrofit.create(IWorldTime.class);
     }
 
-
-    public void start() {
-        service.getTime().enqueue(this);
+    public Call<WorldClock> start() {
         Log.i(TAG, "start: getting time");
+        return service.getTime();
     }
 
-    @Override
-    public void onResponse(Call<WorldClock> call, Response<WorldClock> response) {
-        if (response.isSuccessful() && response.body() != null) {
-            repo = Repository.get();
-            repo.fetchTime(response.body());
-            Log.i(TAG, "onResponse: clock day: " + response.body().getDayOfTheWeek());
-        } else {
-            Log.d(TAG, "onResponse: couldn't fetch clock");
-        }
-    }
-
-    @Override
-    public void onFailure(Call<WorldClock> call, Throwable throwable) {
-       // call.enqueue(this);
-        Log.e(TAG, "onFailure: couldn't get time", throwable);
-    }
 }

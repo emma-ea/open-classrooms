@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.SplashActivity"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".views.SplashActivity">
 
     <ImageView
         android:id="@+id/ocr_splash_image"
         android:layout_width="0dp"
         android:layout_height="70dp"
+        android:contentDescription="@string/ocr_logo"
         android:src="@drawable/ic_ocr"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/ocr_logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/ocr_splash_text"
@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
         android:fontFamily="@font/lato_light"
-        android:text="@string/splash_ocr_text"
         android:gravity="center_horizontal"
+        android:text="@string/splash_ocr_text"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,11 +34,12 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/splash_text"
         android:fontFamily="@font/lato_light"
+        android:text="@string/splash_text"
         android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="@id/ocr_splash_text"
         app:layout_constraintStart_toStartOf="@id/ocr_splash_text"
-        app:layout_constraintTop_toBottomOf="@id/ocr_splash_text" />
+        app:layout_constraintTop_toBottomOf="@id/ocr_splash_text"
+        tools:ignore="SmallSp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

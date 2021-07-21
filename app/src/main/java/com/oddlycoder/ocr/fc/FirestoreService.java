@@ -1,4 +1,4 @@
-package com.oddlycoder.ocr.utils;
+package com.oddlycoder.ocr.fc;
 
 import android.util.Log;
 
@@ -42,25 +42,19 @@ public class FirestoreService {
 
                             Classroom classroom = new Classroom();
                             classroom.setClassroom(documentSnapshot.getId());
-
                             Log.d(TAG, "getClassroom: document id: " + documentSnapshot.getId());
-                            Log.d(TAG, "getClassroom: document data all: " + documentSnapshot.getData());
-                            Log.d(TAG, "getClassroom: document data keys: " + documentSnapshot.getData().keySet());
-                            Log.d(TAG, "getClassroom: document data values: " + documentSnapshot.getData().values());
+
 
                             List<Day> week = new ArrayList<>();
                             for (String key : documentSnapshot.getData().keySet()) {
                                 Day day = new Day();
                                 day.setDay(key);
-                                TTable classHour;
-                               /* for (Object hour : documentSnapshot.getData().values()) {
-                                    classHour = (TTable) hour;
-                                    day.setTtables(classHour);
-                                }*/
+                                //String path = String.format("/%s/%s/%s", CL_COLLECTION, documentSnapshot.getId(), key);
+                                //TTable classHour = documentSnapshot.get(path, TTable.class);
+                                //day.setTtables(classHour);
                                 week.add(day);
                             }
                             classroom.setWeek(week);
-
                             classrooms.add(classroom);
 
                         }

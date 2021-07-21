@@ -6,29 +6,35 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.oddlycoder.ocr.fc.FirebaseUserSetup;
 import com.oddlycoder.ocr.model.Classroom;
+import com.oddlycoder.ocr.model.Student;
 import com.oddlycoder.ocr.model.WorldClock;
-import com.oddlycoder.ocr.utils.FirestoreProducer;
-import com.oddlycoder.ocr.utils.FirestoreService;
-import com.oddlycoder.ocr.utils.WorldTimeApiClient;
+import com.oddlycoder.ocr.fc.FirestoreService;
+import com.oddlycoder.ocr.utils.WorldTimeClient;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Repository implements IRepository {
 
-    public static final String TAG = "com.oddlycoder.ocr";
+    public static final String TAG = "Repository";
 
     private static Repository instance = null;
-    private final Context context;
 
     private final MutableLiveData<WorldClock> clock = new MutableLiveData<>();
-    private FirestoreService fs;
+    private final FirestoreService fs;
+    private FirebaseUserSetup userSetup;
+    private final WorldTimeClient client;
 
     private Repository(Context ctx) {
-        this.context = ctx;
-        WorldTimeApiClient client = new WorldTimeApiClient(ctx);
-        fs = new FirestoreService();
+        client = new WorldTimeClient();
         client.start();
+        fs = new FirestoreService();
+        userSetup = new FirebaseUserSetup();
     }
 
     public static void initialize(Context ctx) {
@@ -42,9 +48,18 @@ public class Repository implements IRepository {
         throw new IllegalStateException("repository not initialized");
     }
 
-    public void fetchTime(WorldClock clock) {
-        Log.i(TAG, "fetchTime: ");
-        this.clock.setValue(clock);
+    public void getTime() {
+        client.start().enqueue(new Callback<WorldClock>() {
+            @Override
+            public void onResponse(Call<WorldClock> call, Response<WorldClock> response) {
+                clock.postValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<WorldClock> call, Throwable t) {
+                Log.e(TAG, "onFailure: time fetch failed", t);
+            }
+        });
     }
 
     @Override
@@ -58,10 +73,14 @@ public class Repository implements IRepository {
         return fs.getClassroom();
     }
 
-    public LiveData<List<Classroom>> getClassroomData() {
-        return FirestoreProducer.fetchClassrooms();
+    public void setUpNewUser(Student student, String Uuid) {
+        userSetup.createNewUser(Uuid, student);
     }
 
+    public LiveData<Student> getUserDetail(String uuid) {
+        //TODO: get user detail
+        return userSetup.getStudentDetail(uuid);
+    }
 
 }
 

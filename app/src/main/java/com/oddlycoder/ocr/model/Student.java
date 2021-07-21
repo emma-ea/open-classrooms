@@ -9,6 +9,8 @@ public class Student {
     private String year;
     private String email;
 
+    public Student() { }
+
     public Student(String profileImageUrl, String username, String fullName, String courseProgram, String year, String email) {
         this.profileImageUrl = profileImageUrl;
         this.username = username;
