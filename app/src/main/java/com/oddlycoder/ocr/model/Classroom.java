@@ -3,10 +3,11 @@ package com.oddlycoder.ocr.model;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Classroom {
+public class Classroom implements Serializable {
 
     private String classroom;
 

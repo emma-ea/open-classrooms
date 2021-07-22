@@ -41,21 +41,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
 
     }
 
-
-    @Override
-    public void onBackPressed() {
-        if (exitCount == 0)
-            snackMessage("Press back button again to exit app");
-        if (exitCount == 1)
-            snackMessage("Press back button one more time to exit");
-        if (exitCount >= 2)
-            super.onBackPressed();
-        exitCount++;
-        // reset exitCount after 2 seconds if user has pressed back button.
-        Executors.newSingleThreadScheduledExecutor()
-                .schedule(()-> exitCount = 0, 2000L, TimeUnit.MILLISECONDS);
-    }
-
     @SuppressLint("NonConstantResourceId")
     private final BottomNavigationView.OnNavigationItemSelectedListener navListener = item -> {
         int id = item.getItemId();

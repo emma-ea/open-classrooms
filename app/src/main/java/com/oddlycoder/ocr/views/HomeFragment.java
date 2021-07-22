@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -34,6 +35,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 
 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -48,7 +51,7 @@ public class HomeFragment extends Fragment {
     private TextView mHomeOCRText;
     private ProgressBar mRecyclerLoading;
 
-    private AvailableClassroomsAdapter adapter = new AvailableClassroomsAdapter(Collections.emptyList());
+    private AvailableClassroomsAdapter adapter = new AvailableClassroomsAdapter(Collections.emptyList(), getActivity());
     private UpcomingTimeAdapter upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList());
 
     private List<Classroom> classrooms = new ArrayList<>() ;
@@ -93,9 +96,10 @@ public class HomeFragment extends Fragment {
 
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initAvailable(List<Classroom> classrooms) {
-         adapter = new AvailableClassroomsAdapter(classrooms);
+         adapter = new AvailableClassroomsAdapter(classrooms, getActivity());
         mAvailableClassrooms.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         mAvailableClassrooms.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -177,10 +181,31 @@ public class HomeFragment extends Fragment {
 
     private HomeCallbacks callback = null;
 
+    private int exitCount = 0;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         callback = (HomeCallbacks) context;
+       /* if (getActivity() != null) {
+            getActivity().getOnBackPressedDispatcher().addCallback(, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    Log.d(TAG, "handleOnBackPressed: home fragment back press");
+                    if (exitCount == 0)
+                        snackMessage("Press back button again to exit app");
+                    if (exitCount == 1)
+                        snackMessage("Press back button one more time to exit");
+                    if (exitCount >= 2)
+                        getActivity().finish();
+                    exitCount++;
+                    // reset exitCount after 2 seconds if user has pressed back button.
+                    Executors.newSingleThreadScheduledExecutor()
+                            .schedule(()-> exitCount = 0, 2000L, TimeUnit.MILLISECONDS);
+                }
+            });
+
+        }*/
     }
 
     @Override

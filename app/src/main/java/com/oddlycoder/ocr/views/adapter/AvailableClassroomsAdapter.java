@@ -2,6 +2,7 @@ package com.oddlycoder.ocr.views.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oddlycoder.ocr.R;
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Day;
+import com.oddlycoder.ocr.views.ClassroomDialog;
+import com.oddlycoder.ocr.views.HomeFragment;
+import com.oddlycoder.ocr.views.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +33,11 @@ import java.util.List;
 public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableClassroomsAdapter.ViewHolder> {
 
     private List<Classroom> classrooms = null;
+    private Context context;
 
-    public AvailableClassroomsAdapter(List<Classroom> classrooms) {
+    public AvailableClassroomsAdapter(List<Classroom> classrooms, Context context) {
         this.classrooms = classrooms;
+        this.context = context;
     }
 
     @NonNull
@@ -46,7 +52,7 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
     @Override
     public void onBindViewHolder(@NonNull AvailableClassroomsAdapter.ViewHolder holder, int position) {
         holder.viewDecorator(position);
-        holder.bind(classrooms.get(position)); // TODO pass arguments
+        holder.bind(classrooms.get(position), context); // TODO pass arguments
         fadeAnimation(holder.getItemView());
     }
 
@@ -66,7 +72,10 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
 
         private final TextView mClassroom;
         private TextView mViewCount;
-        private View itemView;
+        private final View itemView;
+
+        private Classroom classroom;
+        private Context context;
 
         private final ConstraintLayout mAvailableItemParent;
         private final ImageView mAvailableIcon;
@@ -110,16 +119,21 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
             mAvailableIcon.setImageDrawable(itemView.getContext().getDrawable(imgColor));
         }
 
-        public void bind(Classroom classroom) {
+        public void bind(Classroom classroom, Context context) {
+            this.classroom = classroom;
+            this.context = context;
             mClassroom.setText(classroom.getClassroom());
         }
 
         @Override
         public void onClick(View v) {
             Toast.makeText(itemView.getContext(), mClassroom.getText(), Toast.LENGTH_SHORT).show();
-            Dialog detailDialog = new AlertDialog.Builder(itemView.getContext())
+            ClassroomDialog dialog = ClassroomDialog.newInstance(classroom);
+            MainActivity ma = (MainActivity) context;
+            dialog.show(ma.getSupportFragmentManager(), "classroom_dialog");
+            /*Dialog detailDialog = new AlertDialog.Builder(itemView.getContext())
                     .setView(R.layout.classroom_item_selected_dialog)
-                    .show();
+                    .show();*/
         }
     }
 

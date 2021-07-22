@@ -15,6 +15,7 @@ import com.oddlycoder.ocr.model.TTable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -49,9 +50,10 @@ public class FirestoreService {
                             for (String key : documentSnapshot.getData().keySet()) {
                                 Day day = new Day();
                                 day.setDay(key);
-                                //String path = String.format("/%s/%s/%s", CL_COLLECTION, documentSnapshot.getId(), key);
-                                //TTable classHour = documentSnapshot.get(path, TTable.class);
-                                //day.setTtables(classHour);
+                                Log.d(TAG, "getClassroom: day: " + day.getDay());
+                                Map<String, String> hours = (Map) documentSnapshot.getData().get(key);
+                                Log.d(TAG, "getClassroom: hours: " + documentSnapshot.getData().get(key));
+                                day.setHours(hours);
                                 week.add(day);
                             }
                             classroom.setWeek(week);

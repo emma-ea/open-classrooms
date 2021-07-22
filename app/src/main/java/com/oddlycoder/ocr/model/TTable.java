@@ -1,14 +1,43 @@
 package com.oddlycoder.ocr.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TTable {
     // mornings
     private String t8_9, t9_10, t1030_1130, t1130_1230;
     // afternoons
     private String t13_14, t14_15, t15_16, t16_17, t17_18;
 
-    public TTable() {}
 
-    public TTable(
+    public static TTable fromMap(Map<String, String> data) {
+        return new TTable(
+                data.get("t8_9"),
+                data.get("t9_10"),
+                data.get("t1030_1130"),
+                data.get("t1130_1230"),
+                data.get("t13_14"),
+                data.get("t14_15"),
+                data.get("t15_16"),
+                data.get("t16_17"),
+                data.get("t17_18"));
+    }
+
+    public Map<String, String> toMap() {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("t8_9", getT8_9());
+        data.put("t9_10", getT9_10());
+        data.put("t1030_1130", getT1030_1130());
+        data.put("t1130_1230", getT1130_1230());
+        data.put("t13_14", getT13_14());
+        data.put("t14_15", getT14_15());
+        data.put("t15_16", getT15_16());
+        data.put("t16_17", getT16_17());
+        data.put("t17_18", getT17_18());
+        return data;
+    }
+
+    private TTable(
             String t8_9,
             String t9_10,
             String t1030_1130,
