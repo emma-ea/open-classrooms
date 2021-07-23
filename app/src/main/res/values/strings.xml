@@ -40,6 +40,7 @@
         <item>2pm - 3pm</item>
         <item>3pm - 4pm</item>
         <item>4pm - 5pm</item>
+        <item>5pm - 6pm</item>
     </string-array>
     <string-array name="classrooms">
         <item>FF11</item>

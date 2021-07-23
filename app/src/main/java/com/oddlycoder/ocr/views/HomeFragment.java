@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.oddlycoder.ocr.R;
 import com.oddlycoder.ocr.model.Classroom;
+import com.oddlycoder.ocr.model.Day;
+import com.oddlycoder.ocr.model.TTable;
 import com.oddlycoder.ocr.viewmodel.HomeViewModel;
 import com.oddlycoder.ocr.views.adapter.AvailableClassroomsAdapter;
 import com.oddlycoder.ocr.views.adapter.UpcomingTimeAdapter;
@@ -40,7 +42,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements UpcomingTimeAdapter.FilterCallback {
 
     public static final String TAG = "co.oddlycoder.ocr";
 
@@ -52,9 +54,9 @@ public class HomeFragment extends Fragment {
     private ProgressBar mRecyclerLoading;
 
     private AvailableClassroomsAdapter adapter = new AvailableClassroomsAdapter(Collections.emptyList(), getActivity());
-    private UpcomingTimeAdapter upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList());
+    private UpcomingTimeAdapter upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList(), this);
 
-    private List<Classroom> classrooms = new ArrayList<>() ;
+    private List<Classroom> classroomsl = new ArrayList<>() ;
 
     @Nullable
     @Override
@@ -86,13 +88,9 @@ public class HomeFragment extends Fragment {
 
         mRecyclerLoading.setVisibility(View.VISIBLE);
 
-        initUpcoming();
         getDayOfWeek();
-
-        // tables livedata
+        initUpcoming();
         classroomData();
-
-        getUpcomingSelected();  // todo: filter primer
 
     }
 
@@ -107,52 +105,110 @@ public class HomeFragment extends Fragment {
 
     private void initUpcoming() {
         String[] times = getResources().getStringArray(R.array.upcoming_time);
-        upcomingAdapter = new UpcomingTimeAdapter(new ArrayList<>(Arrays.asList(times)));
+        upcomingAdapter = new UpcomingTimeAdapter(new ArrayList<>(Arrays.asList(times)), this);
         mUpcomingTimes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         mUpcomingTimes.setAdapter(upcomingAdapter);
     }
 
-    private void getUpcomingSelected() {
-        // TODO: filter available list
-        int s = upcomingAdapter.getSelectedItem();
-        Log.d(TAG, "getUpcomingSelected: selected: " + s);
-    }
-
-    private void filterClassrooms(int byTime) {
-
-    }
-
     private void classroomData() {
-       /* homeViewModel.getClassroomData().observe(getViewLifecycleOwner(), (list) -> {
-            initAvailable(list); // classrooms
-            adapter.notifyDataSetChanged();
-            for (Classroom c : list) {
-                Log.d(TAG, "classroomData: homeFrag name: " + c.getClassroom());
-                for (Day day : c.getWeek()) {
-                  //  Log.d(TAG, "classroomData: homeFrag day: " + day.getDay() + " --> ttables: " + day.getTtables());
-                }
-            }
-        });*/
-
         homeViewModel.sgetClassroom().observe(getViewLifecycleOwner(), new Observer<List<Classroom>>() {
             @Override
             public void onChanged(List<Classroom> classrooms) {
-                initAvailable(classrooms);
-                if (classrooms != null || !classrooms.isEmpty())
+                initAvailable(filterList(classrooms, filterId));
+                classroomsl = classrooms;
+                if (!classrooms.isEmpty())
                     mRecyclerLoading.setVisibility(View.GONE);
-                /*for (Classroom c : classrooms) {
-                    Log.d(TAG, "service classroomData: homeFrag name: " + c.getClassroom());
-                }*/
             }
         });
     }
+
+    private List<Classroom> filterList(List<Classroom> classrooms, int filterId) {
+        Log.d(TAG, "filterList: filtering with " + filterId);
+        List<Classroom> newClassroomList = new ArrayList<>();
+        for (Classroom classroom : classrooms) {
+            for (Day day : classroom.getWeek()) {
+                if (day.getDay().trim().equalsIgnoreCase(date.trim())) {
+                    TTable tTable = day.getTtables();
+                    switch (filterId) {
+                        case 1: {
+                            if (tTable.getT8_9() == null || tTable.getT8_9().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        case 2: {
+                            if (tTable.getT9_10() == null || tTable.getT9_10().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        case 3: {
+                            if (tTable.getT1030_1130() == null || tTable.getT1030_1130().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        case 4: {
+                            if (tTable.getT1130_1230() == null || tTable.getT1130_1230().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        case 5: {
+                            if (tTable.getT13_14() == null || tTable.getT13_14().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        case 6: {
+                            if (tTable.getT14_15() == null || tTable.getT14_15().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        case 7: {
+                            if (tTable.getT15_16() == null || tTable.getT15_16().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        case 8: {
+                            if (tTable.getT16_17() == null || tTable.getT16_17().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        case 9: {
+                            if (tTable.getT17_18() == null || tTable.getT17_18().equals("")) {
+                                newClassroomList.add(classroom);
+                            }
+                        }
+                        break;
+                        default: {
+                            newClassroomList = classrooms;
+                        }
+                    }
+                }
+
+                String dday = day.getDay().trim()
+                if (dday.equalsIgnoreCase("saturday") || dday.equalsIgnoreCase("sunday")) {
+                    Log.d(TAG, "filterList: class not available on weekends");
+                    //TODO: alert user with dialog, classrooms not available on weekends
+                }
+
+            }
+        }
+        return newClassroomList;
+    }
+
+    private String date;
 
     private void getDayOfWeek() {
 
         // use local date if web fails
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.ENGLISH); // i just want the day
-        String date = sdf.format(c.getTime());
+        date = sdf.format(c.getTime());
         Log.d(TAG, "getDayOfWeek: " + date);
 
         mHomeOCRText.setText(String.format("Hello, it's %s", date));
@@ -172,6 +228,16 @@ public class HomeFragment extends Fragment {
         if (message.isEmpty())
             message = getString(R.string.error_sigining_in);
         Snackbar.make(mParent, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    private int filterId = 0;
+
+    @Override
+    public int selectedUpcoming(int s) {
+        Log.d(TAG, "selectedUpcoming: i: " + s);
+        initAvailable(filterList(classroomsl, s));
+        filterId = s;
+        return s;
     }
 
     interface HomeCallbacks {

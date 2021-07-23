@@ -1,5 +1,6 @@
 package com.oddlycoder.ocr.views.adapter;
 
+import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oddlycoder.ocr.R;
+import com.oddlycoder.ocr.views.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +22,17 @@ import java.util.List;
 public class UpcomingTimeAdapter extends RecyclerView.Adapter<UpcomingTimeAdapter.ViewHolder> {
 
     private final List<String> times;
+    private final HomeFragment context;
 
-    public UpcomingTimeAdapter(List<String> times) {
+    public UpcomingTimeAdapter(List<String> times, HomeFragment context) {
         this.times = times;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        filterCallback = (FilterCallback) context;
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.upcoming_time_item, parent, false);
@@ -48,6 +53,7 @@ public class UpcomingTimeAdapter extends RecyclerView.Adapter<UpcomingTimeAdapte
 
         if (selectedRow == position) {
             holder.getParent().setBackgroundResource(R.drawable.upcoming_time_item_selected);
+            filterCallback.selectedUpcoming(selectedRow);
         } else {
             holder.getParent().setBackgroundResource(R.drawable.upcoming_time_item);
         }
@@ -93,6 +99,12 @@ public class UpcomingTimeAdapter extends RecyclerView.Adapter<UpcomingTimeAdapte
 
         public ConstraintLayout getParent() { return mParent; }
 
+    }
+
+    public FilterCallback filterCallback;
+
+    public interface FilterCallback {
+        int selectedUpcoming(int s);
     }
 
 }
