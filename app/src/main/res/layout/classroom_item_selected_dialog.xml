@@ -36,16 +36,94 @@
             app:layout_constraintVertical_bias="0.32"
             tools:text="FF1" />
 
+        <ImageView
+            android:id="@+id/time_classroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_info"
+            android:layout_marginTop="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias=".1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_classroom_name"/>
+
         <TextView
             android:id="@+id/classroom_des"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Classroom detail"
+            android:text="Classroom Detail"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/work_sans"
+            app:layout_constraintHorizontal_bias=".1"
+            app:layout_constraintStart_toEndOf="@id/time_classroom"
+            app:layout_constraintTop_toTopOf="@id/time_classroom"
+            app:layout_constraintBottom_toBottomOf="@id/time_classroom"/>
+
+        <TextView
+            android:id="@+id/classroom_time_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Available @"
+            android:fontFamily="@font/lato"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias=".0"
+            app:layout_constraintTop_toBottomOf="@id/classroom_des"
+            app:layout_constraintStart_toStartOf="@id/classroom_des"
+            app:layout_constraintEnd_toEndOf="@id/classroom_des"/>
+
+        <TextView
+            android:id="@+id/classroom_time_"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="8am - 9am"
+            android:fontFamily="@font/lato"
+            android:textSize="12sp"
+            android:textColor="@color/item2_img"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@id/classroom_time_info"
+            app:layout_constraintBottom_toBottomOf="@id/classroom_time_info"
+            app:layout_constraintTop_toTopOf="@id/classroom_time_info"/>
+
+        <ImageView
+            android:id="@+id/time_remaining_classroom_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_timer"
+            android:layout_marginTop="48dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias=".1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/dialog_classroom_name" />
+            app:layout_constraintTop_toBottomOf="@id/time_classroom"/>
+
+        <TextView
+            android:id="@+id/classroom_time_remaining_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time remaining"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/work_sans"
+            app:layout_constraintHorizontal_bias=".1"
+            app:layout_constraintStart_toEndOf="@id/time_remaining_classroom_img"
+            app:layout_constraintTop_toTopOf="@id/time_remaining_classroom_img"
+            app:layout_constraintBottom_toBottomOf="@id/time_remaining_classroom_img"/>
+
+        <TextView
+            android:id="@+id/classroom_time_current_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Current time:"
+            android:fontFamily="@font/lato"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias=".0"
+            app:layout_constraintTop_toBottomOf="@id/classroom_time_remaining_header"
+            app:layout_constraintStart_toStartOf="@id/classroom_time_remaining_header"
+            app:layout_constraintEnd_toEndOf="@id/classroom_time_remaining_header"/>
 
         <Button
             android:id="@+id/dialog_close"
@@ -55,7 +133,6 @@
             android:background="@color/dialog_close_btn"
             android:text="Close"
             android:textColor="@color/white"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

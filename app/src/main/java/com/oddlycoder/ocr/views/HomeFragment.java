@@ -14,14 +14,18 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.oddlycoder.ocr.R;
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Day;
@@ -44,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class HomeFragment extends Fragment implements UpcomingTimeAdapter.FilterCallback {
 
-    public static final String TAG = "co.oddlycoder.ocr";
+    public static final String TAG = "HomeFragment";
 
     private HomeViewModel homeViewModel;
 
@@ -52,11 +56,20 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
     private RecyclerView mUpcomingTimes, mAvailableClassrooms;
     private TextView mHomeOCRText;
     private ProgressBar mRecyclerLoading;
+    private LinearLayoutCompat userMsgWeekends;
+    private TextView userMsgText;
 
     private AvailableClassroomsAdapter adapter = new AvailableClassroomsAdapter(Collections.emptyList(), getActivity());
     private UpcomingTimeAdapter upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList(), this);
 
     private List<Classroom> classroomsl = new ArrayList<>() ;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // adapter = new AvailableClassroomsAdapter(Collections.emptyList(), getActivity());
+        // upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList(), this);
+    }
 
     @Nullable
     @Override
@@ -72,6 +85,9 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         mUpcomingTimes = view.findViewById(R.id.upcoming_times_recyclerview);
         mHomeOCRText = view.findViewById(R.id.home_ocr_text);
         mRecyclerLoading = view.findViewById(R.id.recycler_progress);
+        userMsgWeekends = view.findViewById(R.id.home_frag_weekend_msg);
+        userMsgText = view.findViewById(R.id.msg_text_weekends);
+        userMsgWeekends.setVisibility(View.GONE);
 
         view.findViewById(R.id.close_app).setOnClickListener(v -> {
             logout();
@@ -88,26 +104,53 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
 
         mRecyclerLoading.setVisibility(View.VISIBLE);
 
+        recyclerViewsSetup();
+
         getDayOfWeek();
         initUpcoming();
         classroomData();
 
     }
 
+    private void setUserMsgWeekends() {
+        if (date.trim().equalsIgnoreCase("saturday") || date.equalsIgnoreCase("sunday")) {
+            userMsgWeekends.setVisibility(View.VISIBLE);
+            mAvailableClassrooms.setVisibility(View.GONE);
+            FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+            String userName = "";
+            if (fUser != null) {
+                userName = fUser.getDisplayName();
+            }
+            String msg = String.format(
+                    "Hello %s, Classrooms are not available on %ss",
+                    userName,
+                    date);
+            userMsgText.setText(msg);
+
+        }
+    }
+
+    private void recyclerViewsSetup() {
+        mAvailableClassrooms.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        mAvailableClassrooms.setAdapter(adapter);
+        mAvailableClassrooms.setItemAnimator(new DefaultItemAnimator());
+
+        mUpcomingTimes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        mUpcomingTimes.setAdapter(upcomingAdapter);
+        mUpcomingTimes.setItemAnimator(new DefaultItemAnimator());
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initAvailable(List<Classroom> classrooms) {
          adapter = new AvailableClassroomsAdapter(classrooms, getActivity());
-        mAvailableClassrooms.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        mAvailableClassrooms.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 
     private void initUpcoming() {
         String[] times = getResources().getStringArray(R.array.upcoming_time);
+        Log.d(TAG, "initUpcoming: setting adapter");
         upcomingAdapter = new UpcomingTimeAdapter(new ArrayList<>(Arrays.asList(times)), this);
-        mUpcomingTimes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        mUpcomingTimes.setAdapter(upcomingAdapter);
     }
 
     private void classroomData() {
@@ -118,6 +161,14 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
                 classroomsl = classrooms;
                 if (!classrooms.isEmpty())
                     mRecyclerLoading.setVisibility(View.GONE);
+               /* if (classrooms.size() == 0) {
+                    Log.d(TAG, "onChanged: returned empty result");
+                }*/
+
+               /* if (mRecyclerLoading.getVisibility() == View.GONE) {
+                    setUserMsgWeekends();
+                }*/
+
             }
         });
     }
@@ -190,7 +241,7 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
                     }
                 }
 
-                String dday = day.getDay().trim()
+                String dday = day.getDay().trim();
                 if (dday.equalsIgnoreCase("saturday") || dday.equalsIgnoreCase("sunday")) {
                     Log.d(TAG, "filterList: class not available on weekends");
                     //TODO: alert user with dialog, classrooms not available on weekends

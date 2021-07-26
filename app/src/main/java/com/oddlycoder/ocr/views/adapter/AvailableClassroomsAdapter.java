@@ -53,7 +53,7 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
     public void onBindViewHolder(@NonNull AvailableClassroomsAdapter.ViewHolder holder, int position) {
         holder.viewDecorator(position);
         holder.bind(classrooms.get(position), context); // TODO pass arguments
-        fadeAnimation(holder.getItemView());
+       // fadeAnimation(holder.getItemView());
     }
 
     private void fadeAnimation(View holder) {

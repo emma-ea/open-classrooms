@@ -1,7 +1,9 @@
 package com.oddlycoder.ocr.fc;
 
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -31,11 +33,25 @@ public class FirestoreService {
 
     private final MutableLiveData<List<Classroom>> classroomLiveData = new MutableLiveData<>();
 
+
+ /*   @RequiresApi(api = Build.VERSION_CODES.N)
+    public LiveData<List<Classroom>> queryStore(String searchString) {
+        List<Classroom> classrooms = classroomLiveData.getValue();
+        if (classrooms != null) {
+            classrooms.stream().findAny().filter(cr -> {
+                return cr.getClassroom().matches(searchString);
+            });
+        }
+        MutableLiveData<List<Classroom>> result = new MutableLiveData<>();
+        result.postValue(classrooms);
+        return result;
+    }*/
+
     public LiveData<List<Classroom>> getClassroom() {
 
         List<Classroom> classrooms = new ArrayList<>();
 
-        db.collection("classroom")
+        db.collection(CL_COLLECTION)
                 .get()
                 .addOnCompleteListener((task) -> {
                     if (task.isSuccessful() && task.getResult() != null) {

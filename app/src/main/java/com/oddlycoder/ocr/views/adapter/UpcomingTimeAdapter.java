@@ -39,16 +39,16 @@ public class UpcomingTimeAdapter extends RecyclerView.Adapter<UpcomingTimeAdapte
         return new ViewHolder(view);
     }
 
-    int selectedRow = 0;
+    static int selectedRow = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onBindViewHolder(@NonNull UpcomingTimeAdapter.ViewHolder holder, int position) {
         holder.bind(times.get(position));
-        fadeAnimation(holder.getItemView());
+       // fadeAnimation(holder.getItemView());
         holder.getParent().setOnClickListener((view) -> {
             selectedRow = position;
-            notifyDataSetChanged();
+             notifyDataSetChanged();
         });
 
         if (selectedRow == position) {
@@ -60,9 +60,10 @@ public class UpcomingTimeAdapter extends RecyclerView.Adapter<UpcomingTimeAdapte
 
     }
 
-    public int getSelectedItem() {
+    public static int getSelectedItem() {
         return selectedRow;
     }
+
 
     private void fadeAnimation(View itemView) {
         AlphaAnimation fadeAnim = new AlphaAnimation(0.0f, 1.0f);

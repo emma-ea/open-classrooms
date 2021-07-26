@@ -23,7 +23,7 @@
     <string name="find_bottom_nav">Find</string>
     <string name="profile_bottom_nav">Profile</string>
     <string name="search_frag_header_text">Find a classroom</string>
-    <string name="search_frag_search_box">Enter time or classroom to search</string>
+    <string name="search_frag_search_box">Enter classroom to search</string>
     <string name="profile_frag_username">Username</string>
     <string name="profile_frag_name">Name</string>
     <string name="profile_frag_course_program">Course Program</string>
@@ -41,12 +41,5 @@
         <item>3pm - 4pm</item>
         <item>4pm - 5pm</item>
         <item>5pm - 6pm</item>
-    </string-array>
-    <string-array name="classrooms">
-        <item>FF11</item>
-        <item>FF12</item>
-        <item>FF13</item>
-        <item>FF14</item>
-        <item>FF15</item>
     </string-array>
 </resources>

@@ -1,4 +1,4 @@
-package com.oddlycoder.ocr.fc;
+ package com.oddlycoder.ocr.fc;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

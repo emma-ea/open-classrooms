@@ -34,7 +34,8 @@ public class ProfileFragment extends Fragment {
     public static final String TAG = "ProfileFragment";
 
     private ProfileViewModel profileViewModel;
-    private final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseUser firebaseUser =
+            FirebaseAuth.getInstance().getCurrentUser();
 
     private TextView userName, fullName, courseProgram, year, email;
     private TextView profileHeaderWelcome;

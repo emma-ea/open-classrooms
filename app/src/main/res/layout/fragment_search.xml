@@ -48,6 +48,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_find_classroom" />
 
+    <ImageView
+        android:id="@+id/clear_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="@id/search_edit_text"
+        app:layout_constraintBottom_toBottomOf="@id/search_edit_text"
+        app:layout_constraintEnd_toEndOf="@id/search_edit_text"/>
+
     <FrameLayout
         android:id="@+id/search_frame"
         android:layout_width="match_parent"
@@ -57,7 +67,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_edit_text">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_result_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ProgressBar
+            android:id="@+id/search_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/upcoming_item_border"
+            android:layout_gravity="center"/>
+
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/search_frag_desc_parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
