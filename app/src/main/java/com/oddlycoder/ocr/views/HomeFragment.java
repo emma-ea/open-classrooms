@@ -108,8 +108,6 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         getDayOfWeek();
         initUpcoming();
 
-        recyclerViewsSetup();
-
         classroomData();
     }
 
@@ -131,20 +129,12 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         }
     }
 
-    private void recyclerViewsSetup() {
-        mAvailableClassrooms.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        mAvailableClassrooms.setAdapter(adapter);
-        mAvailableClassrooms.setItemAnimator(new DefaultItemAnimator());
-
-        mUpcomingTimes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
-        mUpcomingTimes.setAdapter(upcomingAdapter);
-        mUpcomingTimes.setItemAnimator(new DefaultItemAnimator());
-    }
-
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initAvailable(List<Classroom> classrooms) {
         adapter = new AvailableClassroomsAdapter(classrooms, getActivity());
+        mAvailableClassrooms.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        mAvailableClassrooms.setAdapter(adapter);
+        mAvailableClassrooms.setItemAnimator(new DefaultItemAnimator());
         adapter.notifyDataSetChanged();
     }
 
@@ -152,6 +142,9 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         String[] times = getResources().getStringArray(R.array.upcoming_time);
         Log.d(TAG, "initUpcoming: setting adapter");
         upcomingAdapter = new UpcomingTimeAdapter(new ArrayList<>(Arrays.asList(times)), this);
+        mUpcomingTimes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        mUpcomingTimes.setAdapter(upcomingAdapter);
+        mUpcomingTimes.setItemAnimator(new DefaultItemAnimator());
     }
 
     private void classroomData() {
