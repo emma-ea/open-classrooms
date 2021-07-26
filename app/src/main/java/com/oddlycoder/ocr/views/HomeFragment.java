@@ -190,7 +190,7 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
                     }
                 }
 
-                String dday = day.getDay().trim()
+                String dday = day.getDay().trim();
                 if (dday.equalsIgnoreCase("saturday") || dday.equalsIgnoreCase("sunday")) {
                     Log.d(TAG, "filterList: class not available on weekends");
                     //TODO: alert user with dialog, classrooms not available on weekends
