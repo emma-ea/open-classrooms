@@ -59,16 +59,16 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
     private LinearLayoutCompat userMsgWeekends;
     private TextView userMsgText;
 
-    private AvailableClassroomsAdapter adapter = new AvailableClassroomsAdapter(Collections.emptyList(), getActivity());
-    private UpcomingTimeAdapter upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList(), this);
+    private AvailableClassroomsAdapter adapter;
+    private UpcomingTimeAdapter upcomingAdapter;
 
     private List<Classroom> classroomsl = new ArrayList<>() ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // adapter = new AvailableClassroomsAdapter(Collections.emptyList(), getActivity());
-        // upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList(), this);
+         adapter = new AvailableClassroomsAdapter(Collections.emptyList(), getActivity());
+         upcomingAdapter = new UpcomingTimeAdapter(Collections.emptyList(), this);
     }
 
     @Nullable
@@ -104,12 +104,13 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
 
         mRecyclerLoading.setVisibility(View.VISIBLE);
 
-        recyclerViewsSetup();
 
         getDayOfWeek();
         initUpcoming();
-        classroomData();
 
+        recyclerViewsSetup();
+
+        classroomData();
     }
 
     private void setUserMsgWeekends() {
@@ -143,7 +144,7 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initAvailable(List<Classroom> classrooms) {
-         adapter = new AvailableClassroomsAdapter(classrooms, getActivity());
+        adapter = new AvailableClassroomsAdapter(classrooms, getActivity());
         adapter.notifyDataSetChanged();
     }
 
@@ -157,17 +158,19 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         homeViewModel.sgetClassroom().observe(getViewLifecycleOwner(), new Observer<List<Classroom>>() {
             @Override
             public void onChanged(List<Classroom> classrooms) {
-                initAvailable(filterList(classrooms, filterId));
                 classroomsl = classrooms;
+                initAvailable(filterList(classrooms, filterId));
+
                 if (!classrooms.isEmpty())
                     mRecyclerLoading.setVisibility(View.GONE);
-               /* if (classrooms.size() == 0) {
-                    Log.d(TAG, "onChanged: returned empty result");
-                }*/
 
-               /* if (mRecyclerLoading.getVisibility() == View.GONE) {
+                if (classrooms.size() == 0) {
+                    Log.d(TAG, "onChanged: returned empty result");
+                }
+
+                if (mRecyclerLoading.getVisibility() == View.GONE) {
                     setUserMsgWeekends();
-                }*/
+                }
 
             }
         });
