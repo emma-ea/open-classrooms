@@ -17,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OCR"
         tools:targetApi="m">
-        <activity android:name=".views.SplashActivity" android:screenOrientation="portrait"
+        <activity android:name=".views.SplashActivity"
+            android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:exported="true">
             <intent-filter>

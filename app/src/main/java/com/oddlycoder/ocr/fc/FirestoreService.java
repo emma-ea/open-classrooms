@@ -35,7 +35,7 @@ public class FirestoreService {
 
         List<Classroom> classrooms = new ArrayList<>();
 
-        db.collection("classroom")
+        db.collection(CL_COLLECTION)
                 .get()
                 .addOnCompleteListener((task) -> {
                     if (task.isSuccessful() && task.getResult() != null) {
