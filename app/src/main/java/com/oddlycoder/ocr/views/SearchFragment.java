@@ -22,7 +22,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.oddlycoder.ocr.R;
+import com.oddlycoder.ocr.databinding.FragmentSearchBinding;
 import com.oddlycoder.ocr.model.Classroom;
+import com.oddlycoder.ocr.viewmodel.HomeViewModel;
 import com.oddlycoder.ocr.viewmodel.SearchViewModel;
 import com.oddlycoder.ocr.views.adapter.SearchAdapter;
 
@@ -33,20 +35,18 @@ public class SearchFragment extends Fragment {
 
     private static final String TAG = "SearchFragment";
 
-    private EditText searchEditText;
-    private LinearLayoutCompat searchDescParent;
-    private SearchViewModel searchViewModel;
-    private RecyclerView searchRecyclerView;
-    private ProgressBar searchProgressBar;
-    private ImageView clearEditText;
-
+    //private SearchViewModel searchViewModel;
+    private HomeViewModel searchViewModel;  // sharing homeViewModel
     private SearchAdapter adapter;
+
+    private FragmentSearchBinding binding;
+    private View view;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new SearchAdapter(Collections.emptyList());
-        searchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+        searchViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     }
 
     @Nullable
@@ -55,25 +55,24 @@ public class SearchFragment extends Fragment {
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-        searchEditText = view.findViewById(R.id.search_edit_text);
-        searchDescParent = view.findViewById(R.id.search_frag_desc_parent);
-        searchRecyclerView = view.findViewById(R.id.search_result_recyclerview);
-        searchProgressBar = view.findViewById(R.id.search_progress_bar);
-        clearEditText = view.findViewById(R.id.clear_edit_text);
+        binding = FragmentSearchBinding.inflate(inflater);
+        view = binding.getRoot();
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        searchProgressBar.setVisibility(View.GONE);
-        searchRecyclerView.setVisibility(View.GONE);
+        binding.searchProgressBar.setVisibility(View.GONE);
+        binding.searchResultRecyclerview.setVisibility(View.GONE);
 
-        searchRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
-        searchRecyclerView.setAdapter(adapter);
+        binding.clearEditText.setOnClickListener(listener -> binding.searchEditText.getText().clear());
 
-        clearEditText.setOnClickListener((listener) -> searchEditText.getText().clear());
+        binding.searchResultRecyclerview.setLayoutManager(
+                new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
+        binding.searchResultRecyclerview.setAdapter(adapter);
+
+       searchViewModel.getClassrooms().observe(getViewLifecycleOwner(), this::initAdapter);
 
     }
 
@@ -88,8 +87,8 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchDescParent.setVisibility(View.VISIBLE);
-                // adapter.getFilter().filter(s);
+                binding.searchFragDescParent.setVisibility(View.GONE);
+                adapter.getFilter().filter(s);
             }
 
             @Override
@@ -98,11 +97,16 @@ public class SearchFragment extends Fragment {
             }
         };
 
-        searchEditText.addTextChangedListener(watcher);
+        binding.searchEditText.addTextChangedListener(watcher);
 
     }
 
     private void initAdapter(List<Classroom> classroomList) {
+        if (classroomList.isEmpty()) {
+            binding.searchFragDescParent.setVisibility(View.VISIBLE);
+        }
         adapter = new SearchAdapter(classroomList);
+        binding.searchResultRecyclerview.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

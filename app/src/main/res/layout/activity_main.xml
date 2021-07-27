@@ -10,7 +10,8 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_anchor="@id/bottom_nav_bar"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_bar"
@@ -20,7 +21,7 @@
         android:background="@color/white"
         app:backgroundTint="@color/bottom_nav_bg_tint"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:menu="@menu/activity_bottom_menu" />
+        app:menu="@menu/activity_bottom_menu"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

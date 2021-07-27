@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="53dp"
+        android:maxLines="1"
         android:background="@drawable/search_background"
         android:drawableStart="@drawable/ic_search_bb"
         android:drawablePadding="16dp"
@@ -70,7 +71,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_result_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            tools:itemCount="3"
+            tools:listitem="@layout/search_item_view"/>
 
         <ProgressBar
             android:id="@+id/search_progress_bar"

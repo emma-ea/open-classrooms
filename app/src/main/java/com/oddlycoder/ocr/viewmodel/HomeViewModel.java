@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.WorldClock;
@@ -18,6 +19,7 @@ public class HomeViewModel extends AndroidViewModel {
     private final Repository repository;
     public static final String TAG = "HomeFragmentVM";
 
+
     public HomeViewModel(@NonNull Application application) {
         super(application);
         repository = Repository.get();
@@ -28,7 +30,7 @@ public class HomeViewModel extends AndroidViewModel {
         return repository.getClock();
     }
 
-    public LiveData<List<Classroom>> sgetClassroom() {
+    public LiveData<List<Classroom>> getClassrooms() {
         Log.d(TAG, "service getClassroom: view Model");
         return repository.getClassroom();
     }

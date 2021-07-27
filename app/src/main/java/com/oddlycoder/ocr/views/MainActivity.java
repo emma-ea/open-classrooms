@@ -16,7 +16,9 @@ import com.oddlycoder.ocr.R;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.HomeCallbacks {
+public class MainActivity extends AppCompatActivity implements
+        HomeFragment.HomeCallbacks,
+        ProfileFragment.ProfileCallbacks {
 
     public static final String TAG = "MainActivity";
     public static final String AUTH_CONTEXT = "auth-context";
@@ -112,5 +114,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Home
     protected void onDestroy() {
         super.onDestroy();
         authActivity = null;
+    }
+
+    @Override
+    public void deleteProfile() {
+        authActivity.googleSignOut();
+        startAuthActivity();
     }
 }

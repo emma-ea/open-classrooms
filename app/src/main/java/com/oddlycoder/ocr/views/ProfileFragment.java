@@ -1,11 +1,14 @@
 package com.oddlycoder.ocr.views;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,7 +44,11 @@ public class ProfileFragment extends Fragment {
     private TextView profileHeaderWelcome;
     private CircleImageView imageView;
 
+    private Button profileUpdate, deleteAccount;
+
     private ProgressBar imageLoad, unameLoad, fNameLoad, courseLoad, yearLoad;
+
+    private Student student;
 
     @Nullable
     @Override
@@ -61,6 +68,9 @@ public class ProfileFragment extends Fragment {
         courseLoad = view.findViewById(R.id.course_load_progress);
         yearLoad = view.findViewById(R.id.year_load_progress);
 
+        profileUpdate = view.findViewById(R.id.profile_update);
+        deleteAccount = view.findViewById(R.id.profile_delete);
+
         profileHeaderWelcome = view.findViewById(R.id.profile_user_name);
 
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
@@ -70,15 +80,32 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        profileViewModel.getUserDetail(firebaseUser.getUid()).observe(getViewLifecycleOwner(), new Observer<Student>() {
-            @Override
-            public void onChanged(Student student) {
-                showProgressBar();
-                if (student != null) {
-                    setUpProfile(student);
-                    hideProgressBar();
-                }
+        profileViewModel.getUserDetail(firebaseUser.getUid()).observe(getViewLifecycleOwner(), student -> {
+            showProgressBar();
+            if (student != null) {
+                this.student = student;
+                setUpProfile(student);
+                hideProgressBar();
             }
+        });
+
+        profileUpdate();
+        deleteAccount();
+        
+    }
+
+    private void profileUpdate() {
+        profileUpdate.setOnClickListener(listener -> {
+            new AlertDialog.Builder(this.getActivity())
+                    .setTitle("Update Profile")
+                    .show();
+        });
+    }
+
+    private void deleteAccount() {
+        deleteAccount.setOnClickListener(listener -> {
+            Log.d(TAG, "deleteAccount: google sign out. moving to auth screen");
+            callbacks.deleteProfile();       
         });
     }
 
@@ -137,8 +164,29 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        callbacks = (ProfileCallbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callbacks = null;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         Log.i(TAG, "onStart: profile fragment");
     }
+    
+    private ProfileCallbacks callbacks;
+    
+    interface ProfileCallbacks {
+        void deleteProfile();
+    }
+
+
+
 }

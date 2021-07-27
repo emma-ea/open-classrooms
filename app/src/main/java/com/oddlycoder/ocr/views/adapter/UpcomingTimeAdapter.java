@@ -45,7 +45,7 @@ public class UpcomingTimeAdapter extends RecyclerView.Adapter<UpcomingTimeAdapte
     @Override
     public void onBindViewHolder(@NonNull UpcomingTimeAdapter.ViewHolder holder, int position) {
         holder.bind(times.get(position));
-       // fadeAnimation(holder.getItemView());
+        fadeAnimation(holder.getItemView());
         holder.getParent().setOnClickListener((view) -> {
             selectedRow = position;
              notifyDataSetChanged();

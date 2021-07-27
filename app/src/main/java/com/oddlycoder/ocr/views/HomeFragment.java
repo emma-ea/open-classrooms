@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -22,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,8 +41,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 
 @RequiresApi(api = Build.VERSION_CODES.M)
@@ -58,6 +56,8 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
     private ProgressBar mRecyclerLoading;
     private LinearLayoutCompat userMsgWeekends;
     private TextView userMsgText;
+
+    private SwipeRefreshLayout refreshLayout;
 
     private AvailableClassroomsAdapter adapter;
     private UpcomingTimeAdapter upcomingAdapter;
@@ -88,9 +88,11 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         userMsgWeekends = view.findViewById(R.id.home_frag_weekend_msg);
         userMsgText = view.findViewById(R.id.msg_text_weekends);
         userMsgWeekends.setVisibility(View.GONE);
+        refreshLayout = view.findViewById(R.id.swipe_refresh_layout);
 
         view.findViewById(R.id.close_app).setOnClickListener(v -> {
             logout();
+            FirebaseAuth.getInstance().signOut();
         });
 
         return view;
@@ -109,6 +111,18 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         initUpcoming();
 
         classroomData();
+
+        setRefreshLayout();
+
+    }
+
+    private void setRefreshLayout() {
+        refreshLayout.setOnRefreshListener(() -> {
+            Log.d(TAG, "onRefresh: reloading classroomData()");
+            classroomData();
+            refreshLayout.setRefreshing(false);
+        });
+
     }
 
     private void setUserMsgWeekends() {
@@ -148,7 +162,7 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
     }
 
     private void classroomData() {
-        homeViewModel.sgetClassroom().observe(getViewLifecycleOwner(), new Observer<List<Classroom>>() {
+        homeViewModel.getClassrooms().observe(getViewLifecycleOwner(), new Observer<List<Classroom>>() {
             @Override
             public void onChanged(List<Classroom> classrooms) {
                 classroomsl = classrooms;

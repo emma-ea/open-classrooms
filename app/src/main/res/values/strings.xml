@@ -42,4 +42,16 @@
         <item>4pm - 5pm</item>
         <item>5pm - 6pm</item>
     </string-array>
+    <string-array name="upcoming_time_class_dialog">
+        <item>View All</item>
+        <item>8:00am - 9:00am</item>
+        <item>9:00am - 10:00am</item>
+        <item>10:30am - 11:30am</item>
+        <item>11:30am - 12:30pm</item>
+        <item>13:00pm - 14:00pm</item>
+        <item>14:00pm - 15:00pm</item>
+        <item>15:00pm - 16:00pm</item>
+        <item>16:00pm - 17:00pm</item>
+        <item>17:00pm - 18:00pm</item>
+    </string-array>
 </resources>

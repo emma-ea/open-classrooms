@@ -1,6 +1,7 @@
 package com.oddlycoder.ocr.views;
 
-import android.app.Dialog;
+import android.content.res.Resources;
+import android.icu.util.TimeUnit;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.oddlycoder.ocr.R;
@@ -23,22 +25,27 @@ import com.oddlycoder.ocr.views.adapter.UpcomingTimeAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class ClassroomDialog extends DialogFragment {
 
     public static final String TAG = "ClassroomDialog";
+    public static final String EARLY = "Period will be available in";
+    public static final String IN = "Period already started in";
+    public static final String MISSED = "You missed this period by";
 
     public static final String DIALOG_TAG = "classroom";
     private TextView classroomName, classroomTime;
     private TextView ttlClassroom; // time to live
     private Button dialogClose;
+    private ImageView missedSessionImg;
+    private TextView missedSessionTxt;
     private FrameLayout parent;
+
+    private int remainingHrs, remainingMins;
 
     public static ClassroomDialog newInstance(Classroom classroom) {
         Bundle bundle = new Bundle();
@@ -61,6 +68,12 @@ public class ClassroomDialog extends DialogFragment {
         dialogClose = view.findViewById(R.id.dialog_close);
         ttlClassroom = view.findViewById(R.id.classroom_time_current_time);
         parent = view.findViewById(R.id.dialog_parent);
+        missedSessionImg = view.findViewById(R.id.missed_session_img);
+        missedSessionTxt = view.findViewById(R.id.missed_session_text);
+
+        missedSessionImg.setVisibility(View.GONE);
+        missedSessionTxt.setVisibility(View.GONE);
+
         return view;
     }
 
@@ -75,20 +88,51 @@ public class ClassroomDialog extends DialogFragment {
             classroomName.setText(classroom.getClassroom());
             for (Day day : classroom.getWeek()) {
                 if (day.getDay().equalsIgnoreCase(DateUtil.getDayOrTime(DateUtil.DAY))) {
+                    String[] time24hr = getResources().getStringArray(R.array.upcoming_time_class_dialog);
                     String[] times = getResources().getStringArray(R.array.upcoming_time);
-                    String time = String.format("Current time: %s", DateUtil.getDayOrTime(DateUtil.TIME));
+
+                    String time = DateUtil.getDayOrTime(DateUtil.TIME);
+                    String ftime = String.format("Current time: %s", DateUtil.getDayOrTime(DateUtil.TIME));
+
                     String upcoming = times[UpcomingTimeAdapter.getSelectedItem()];
+                    String upcoming24hr = time24hr[UpcomingTimeAdapter.getSelectedItem()];
 
-                    String rTime;
+                    String rTime = ""; // time difference
 
-                    try {
-                        rTime = timeDifference(time, upcoming);
-                    } catch (ParseException pe) {
-                        Log.e(TAG, "onViewCreated: ", pe);
+                    if (!upcoming.equalsIgnoreCase("view all")) {
+                        try {
+                            switch (timeDifference(time, upcoming24hr)) {
+                                case EARLY:
+                                    Log.d(TAG, "onViewCreated: early with " + remainingHrs + " " + remainingMins);
+                                    rTime = String.format(Locale.ENGLISH, "%s %dhrs %dmins", EARLY, remainingHrs, remainingMins);
+                                    break;
+                                case IN:
+                                    Log.d(TAG, "onViewCreated: in with " + remainingHrs + " " + remainingMins);
+                                    rTime = String.format(Locale.ENGLISH,"%s %dhrs %dmins", IN, remainingHrs, remainingMins);
+                                    break;
+                                case MISSED:
+                                    Log.d(TAG, "onViewCreated: missed  with " + remainingHrs + " " + remainingMins);
+                                    rTime = String.format(Locale.ENGLISH,"%s %dhrs %dmins", MISSED, remainingHrs, remainingMins);
+                                    missedSessionImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_missed));
+                                    //missedSessionImg.setImageDrawable(ResourcesCompat.getDrawable(Resources., R.drawable.ic_missed));
+                                    break;
+                                default:
+                                    Log.d(TAG, "onViewCreated: something went wrong");
+                            }
+
+                        } catch (ParseException pe) {
+                            Log.e(TAG, "onViewCreated: ", pe);
+                        }
+                    }
+
+                    if (!rTime.trim().isEmpty()) {
+                        missedSessionImg.setVisibility(View.VISIBLE);
+                        missedSessionTxt.setVisibility(View.VISIBLE);
+                        missedSessionTxt.setText(rTime);
                     }
 
                     classroomTime.setText(upcoming);
-                    ttlClassroom.setText(time);
+                    ttlClassroom.setText(ftime);
 
                     if (day.getClassHours().containsValue("")) {
                     }
@@ -99,17 +143,84 @@ public class ClassroomDialog extends DialogFragment {
         }
     }
 
-    private String timeDifference(String currentTime, String upcoming) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
-        Date c = simpleDateFormat.parse(currentTime);
-        String beginningTime = splitUpcoming(upcoming);
-        return beginningTime;
+    private Session timeDifference(String currentTime, String upcoming) throws ParseException, NullPointerException {
+
+        Session session;
+        // TODO: time difference
+        // add 1 hour to current time
+        // if more than last of upcoming
+        // user missed the session
+        // if its less than the beginning, user has oppor
+        // if its more than beginning and less than last, user is within session.
+        String beginningTime = splitUpcoming(upcoming, SplitTimeBy.BEGINNING);
+        String endingTime = splitUpcoming(upcoming, SplitTimeBy.ENDING);
+
+        Date cTime = new SimpleDateFormat("HH:mm", Locale.ENGLISH).parse(currentTime.trim());
+        Date bTime = new SimpleDateFormat("HH:mm", Locale.ENGLISH).parse(beginningTime.trim());
+        Date eTime = new SimpleDateFormat("HH:mm", Locale.ENGLISH).parse(endingTime.trim());
+
+        long currentBeginningDiff = cTime.getTime() - bTime.getTime();
+        long currentEndingDiff = cTime.getTime() - eTime.getTime();
+
+        int currentBeginningResHrs = (int) ((currentBeginningDiff/(1000*60*60) % 24));
+        int currentBeginningResMins = (int) ((currentBeginningDiff/(1000*60) % 60));
+        int currentEndingResHrs = (int) ((currentEndingDiff/(1000*60*60) % 24));
+        int currentEndingResMins = (int) ((currentEndingDiff/(1000*60) % 60));
+
+        // negative means.. student is can use session // session will start in res hours
+        // 0 means.. session time is active // session may end soon
+        // positive means.. student missed session // missed session by res hours
+        // 2. positive means.. student in session.. res mins into session
+
+        // if cBTime is negative.. student is res hrs & mins before session
+        // if cBTime is positive.. add to bTime.. if its less than eTime.. student
+        // in session, if its more than eTime, student missed session.
+        int begTimeHrs = (int) ((bTime.getTime() / (1000 * 60 * 60)) % 24);
+        int begTimeMins = (int) ((bTime.getTime() / (1000 * 60) % 60));
+        int eTimeHrs = (int) ((eTime.getTime() / (1000 * 60 * 60)) % 24);
+        int eTimeMins = (int) ((eTime.getTime() / (1000 * 60) % 60));
+
+        if (currentBeginningResHrs <= 0 && currentBeginningResMins <= 0) {
+            session = Session.EARLY;
+            remainingHrs = Math.abs(currentBeginningResHrs);
+            remainingMins = Math.abs(currentBeginningResMins);
+        } else if ((currentBeginningResHrs >= 0 && currentBeginningResMins <= 0)
+                && ((currentBeginningResHrs + begTimeHrs) < eTimeHrs)) {
+            session = Session.IN;
+            remainingHrs = Math.abs(currentBeginningResHrs + begTimeHrs);
+            remainingMins = Math.abs(currentBeginningResMins + begTimeMins);
+            /*if ((currentBeginningResHrs + begTimeHrs) < eTimeHrs) {
+                session = Session.IN;
+            }*/
+        } else {
+            session = Session.MISSED;
+            remainingHrs = Math.abs(currentBeginningResHrs);
+            remainingMins = Math.abs(currentBeginningResMins);
+        }
+
+        Log.d(TAG, "timeDifference: currentBeginningDiff: Hrs: " + currentBeginningResHrs + " Mins: " + currentBeginningResMins );
+        Log.d(TAG, "timeDifference: currentEndingDiff: Hrs" + currentEndingResHrs + " Mins: " + currentEndingResMins);
+
+        try {
+            Log.d(TAG, "timeDifference: beginning: " + bTime.toString() + " ending: " + eTime.toString() + " current: " + cTime.toString() );
+            Log.d(TAG, "timeDifference: beginning: " + beginningTime + " ending: " + endingTime + " current: " + currentTime);
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
+
+        return session;
     }
 
-    private String splitUpcoming(String upcoming) {
-        String[] result = upcoming.split("_");
-        return result[0].replace('t', ' ').trim();
+    private String splitUpcoming(String upcoming, SplitTimeBy mode) {
+        String[] result = upcoming.split("-");
+        if (mode == SplitTimeBy.BEGINNING)
+            return result[0].replaceAll("(am|pm)", "");
+        return result[1].replaceAll("(am|pm)", "");
     }
+
+    enum SplitTimeBy { BEGINNING, ENDING }
+
+    enum Session { EARLY, IN, MISSED}
 }
 
 
