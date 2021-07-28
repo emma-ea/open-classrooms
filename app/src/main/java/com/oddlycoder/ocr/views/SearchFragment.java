@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.oddlycoder.ocr.R;
 import com.oddlycoder.ocr.databinding.FragmentSearchBinding;
 import com.oddlycoder.ocr.model.Classroom;
+import com.oddlycoder.ocr.model.Day;
+import com.oddlycoder.ocr.model.TTable;
 import com.oddlycoder.ocr.viewmodel.HomeViewModel;
 import com.oddlycoder.ocr.viewmodel.SearchViewModel;
 import com.oddlycoder.ocr.views.adapter.SearchAdapter;
@@ -113,9 +115,20 @@ public class SearchFragment extends Fragment {
         setSelectedInformation((Classroom) searchListAdapter.getItem(pos));
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setSelectedInformation(Classroom classroom) {
         binding.searchResultInclude.classroom.setText(classroom.getClassroom());
-        binding.searchResultInclude.week.setText(Arrays.toString(classroom.getWeek().toArray()));
+        StringBuilder builder = new StringBuilder();
+        for (Day day : classroom.getWeek()) {
+            builder.append(day.getDay());
+            day.getClassHours().forEach((hourkey, hourValue) -> {
+                if (hourValue == null || hourValue.isEmpty()) {
+                    builder.append(String.format("-- %s", hourkey));
+                }
+            });
+            builder.append("\n");
+        }
+        binding.searchResultInclude.week.setText(builder);
     }
 
     private void initSearchListAdapter(List<Classroom> classrooms) {
