@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -27,9 +29,12 @@ import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.viewmodel.HomeViewModel;
 import com.oddlycoder.ocr.viewmodel.SearchViewModel;
 import com.oddlycoder.ocr.views.adapter.SearchAdapter;
+import com.oddlycoder.ocr.views.adapter.SearchListAdapter;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class SearchFragment extends Fragment {
 
@@ -41,6 +46,8 @@ public class SearchFragment extends Fragment {
 
     private FragmentSearchBinding binding;
     private View view;
+
+    private SearchListAdapter searchListAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,16 +70,17 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.searchProgressBar.setVisibility(View.GONE);
-        binding.searchResultRecyclerview.setVisibility(View.GONE);
+//        binding.searchProgressBar.setVisibility(View.GONE);
+//        binding.searchResultRecyclerview.setVisibility(View.GONE);
 
         binding.clearEditText.setOnClickListener(listener -> binding.searchEditText.getText().clear());
 
-        binding.searchResultRecyclerview.setLayoutManager(
+        /*binding.searchResultRecyclerview.setLayoutManager(
                 new LinearLayoutManager(this.getContext(), RecyclerView.VERTICAL, false));
         binding.searchResultRecyclerview.setAdapter(adapter);
-
-       searchViewModel.getClassrooms().observe(getViewLifecycleOwner(), this::initAdapter);
+*/
+//        searchViewModel.getClassrooms().observe(getViewLifecycleOwner(), this::initAdapter);
+        searchViewModel.getClassrooms().observe(getViewLifecycleOwner(), this::initSearchListAdapter);
 
     }
 
@@ -86,7 +94,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.searchFragDescParent.setVisibility(View.GONE);
-                adapter.getFilter().filter(s);
+                //adapter.getFilter().filter(s);
             }
 
             @Override
@@ -95,6 +103,26 @@ public class SearchFragment extends Fragment {
 
         binding.searchEditText.addTextChangedListener(watcher);
 
+        binding.searchEditText.setOnItemClickListener(itemClickListener);
+
+    }
+
+    private final AdapterView.OnItemClickListener itemClickListener = (adapter, view, pos, lPos) -> {
+        Log.d(TAG, "adapter item clicked: at " + pos + "view: " + view);
+        binding.searchResultInclude.searchResultParent.setVisibility(View.VISIBLE);
+        setSelectedInformation((Classroom) searchListAdapter.getItem(pos));
+    };
+
+    private void setSelectedInformation(Classroom classroom) {
+        binding.searchResultInclude.classroom.setText(classroom.getClassroom());
+        binding.searchResultInclude.week.setText(Arrays.toString(classroom.getWeek().toArray()));
+    }
+
+    private void initSearchListAdapter(List<Classroom> classrooms) {
+        searchListAdapter = new SearchListAdapter(
+                SearchFragment.this.requireActivity(), android.R.layout.simple_list_item_1, classrooms);
+        binding.searchEditText.setAdapter(searchListAdapter);
+        searchListAdapter.notifyDataSetChanged();
     }
 
     private void initAdapter(List<Classroom> classroomList) {
@@ -102,7 +130,7 @@ public class SearchFragment extends Fragment {
             binding.searchFragDescParent.setVisibility(View.VISIBLE);
         }
         adapter = new SearchAdapter(classroomList);
-        binding.searchResultRecyclerview.setAdapter(adapter);
+        //binding.searchResultRecyclerview.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
 }

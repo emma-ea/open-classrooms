@@ -36,7 +36,7 @@
             app:layout_constraintTop_toTopOf="@id/ic_profile_ocr_image"
             app:layout_constraintVertical_bias="0.32" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/search_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,19 +75,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/search_edit_text">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/search_result_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:itemCount="3"
-                tools:listitem="@layout/search_item_view"/>
-
-            <ProgressBar
-                android:id="@+id/search_progress_bar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminateTint="@color/upcoming_item_border"
-                android:layout_gravity="center"/>
+            <include
+                android:id="@+id/search_result_include"
+                layout="@layout/search_result_layout"
+                android:visibility="gone"/>
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/search_frag_desc_parent"
