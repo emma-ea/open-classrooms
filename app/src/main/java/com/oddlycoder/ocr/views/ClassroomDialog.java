@@ -16,11 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.oddlycoder.ocr.R;
+import com.oddlycoder.ocr.model.BookedClassroom;
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Day;
 import com.oddlycoder.ocr.utils.DateUtil;
+import com.oddlycoder.ocr.viewmodel.ClassroomDialogViewModel;
 import com.oddlycoder.ocr.views.adapter.UpcomingTimeAdapter;
 
 import java.text.ParseException;
@@ -40,10 +43,12 @@ public class ClassroomDialog extends DialogFragment {
     public static final String DIALOG_TAG = "classroom";
     private TextView classroomName, classroomTime;
     private TextView ttlClassroom; // time to live
-    private Button dialogClose;
+    private Button dialogClose, sendMessageBtn;
     private ImageView missedSessionImg;
     private TextView missedSessionTxt;
     private FrameLayout parent;
+
+    private ClassroomDialogViewModel viewModel;
 
     private int remainingHrs, remainingMins;
 
@@ -70,9 +75,12 @@ public class ClassroomDialog extends DialogFragment {
         parent = view.findViewById(R.id.dialog_parent);
         missedSessionImg = view.findViewById(R.id.missed_session_img);
         missedSessionTxt = view.findViewById(R.id.missed_session_text);
+        sendMessageBtn = view.findViewById(R.id.send_message_header);
 
         missedSessionImg.setVisibility(View.GONE);
         missedSessionTxt.setVisibility(View.GONE);
+
+        viewModel = new ViewModelProvider(this).get(ClassroomDialogViewModel.class);
 
         return view;
     }
@@ -141,6 +149,16 @@ public class ClassroomDialog extends DialogFragment {
             }
 
         }
+        sendMessage();
+    }
+
+    private void sendMessage() {
+        // TODO: send message
+        sendMessageBtn.setOnClickListener(listener -> {
+            BookedClassroom bookedClassroom =
+                    new BookedClassroom();
+            // TODO to view model
+        });
     }
 
     private Session timeDifference(String currentTime, String upcoming) throws ParseException, NullPointerException {

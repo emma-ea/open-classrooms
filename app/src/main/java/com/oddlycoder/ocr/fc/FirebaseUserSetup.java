@@ -51,7 +51,8 @@ public class FirebaseUserSetup {
         return studentDetail;
     }
 
-    private void updateUserDetail(String uuid, Map<String, String> data) {
+    public LiveData<Boolean> updateUserDetail(String uuid, Map<String, String> data) {
+        MutableLiveData<Boolean> isUpdated = new MutableLiveData<>();
         firestore.collection("users")
                 .document(uuid)
                 .set(data)
@@ -59,8 +60,12 @@ public class FirebaseUserSetup {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         // todo: handle response
+                        if (task.isSuccessful()) {
+                            isUpdated.postValue(true);
+                        }
                     }
                 });
+        return isUpdated;
     }
 
     private void createUserDocument() {

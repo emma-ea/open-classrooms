@@ -128,9 +128,8 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
         @Override
         public void onClick(View v) {
             Toast.makeText(itemView.getContext(), mClassroom.getText(), Toast.LENGTH_SHORT).show();
-            ClassroomDialog dialog = ClassroomDialog.newInstance(classroom);
-            MainActivity ma = (MainActivity) context;
-            dialog.show(ma.getSupportFragmentManager(), "classroom_dialog");
+            ClassroomDialog.newInstance(classroom)
+                    .show(((MainActivity) context).getSupportFragmentManager(), "classroom_dialog");
             /*Dialog detailDialog = new AlertDialog.Builder(itemView.getContext())
                     .setView(R.layout.classroom_item_selected_dialog)
                     .show();*/

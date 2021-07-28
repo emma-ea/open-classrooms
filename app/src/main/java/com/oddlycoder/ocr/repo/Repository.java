@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.oddlycoder.ocr.fc.FirebaseUserSetup;
+import com.oddlycoder.ocr.model.BookedClassroom;
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Student;
 import com.oddlycoder.ocr.model.WorldClock;
@@ -16,6 +17,7 @@ import com.oddlycoder.ocr.fc.FirestoreService;
 import com.oddlycoder.ocr.utils.WorldTimeClient;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -82,6 +84,14 @@ public class Repository implements IRepository {
     public LiveData<Student> getUserDetail(String uuid) {
         //TODO: get user detail
         return userSetup.getStudentDetail(uuid);
+    }
+
+    public LiveData<Boolean> updateProfile(String uuid, Map<String, String> updateData) {
+        return userSetup.updateUserDetail(uuid, updateData);
+    }
+
+    public LiveData<Boolean> addBooked(BookedClassroom bookedClassroom) {
+        return fs.addBookedClassroom(bookedClassroom);
     }
 
 }

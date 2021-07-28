@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -96,11 +97,21 @@ public class ProfileFragment extends Fragment {
 
     private void profileUpdate() {
         profileUpdate.setOnClickListener(listener -> {
-            new AlertDialog.Builder(this.getActivity())
-                    .setTitle("Update Profile")
-                    .show();
+            ProfileEditDialog dialog = ProfileEditDialog.newInstance(student);
+            this.getParentFragmentManager().setFragmentResultListener(
+                    ProfileEditDialog.STUDENT_DATA,
+                    ProfileFragment.this,
+                    resultListener
+            );
+            dialog.show(this.getParentFragmentManager(), "profile-update");
         });
     }
+
+    private final FragmentResultListener resultListener = (requestKey, result) -> {
+        if (requestKey.equals(ProfileEditDialog.STUDENT_DATA)) {
+            setUpProfile((Student) result.getSerializable(ProfileEditDialog.STUDENT_DATA));
+        }
+    };
 
     private void deleteAccount() {
         deleteAccount.setOnClickListener(listener -> {

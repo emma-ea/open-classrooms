@@ -3,13 +3,18 @@ package com.oddlycoder.ocr.fc;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.oddlycoder.ocr.model.BookedClassroom;
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Day;
 import com.oddlycoder.ocr.model.TTable;
@@ -27,6 +32,7 @@ public class FirestoreService {
     // retrieve users
 
     public static final String CL_COLLECTION = "classroom";
+    public static final String BOOKED = "booked";
     public static final String TAG = "FirestoreService";
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -46,6 +52,19 @@ public class FirestoreService {
         result.postValue(classrooms);
         return result;
     }*/
+
+    public LiveData<Boolean> addBookedClassroom(BookedClassroom bookedClassroom) {
+        MutableLiveData<Boolean> booked = new MutableLiveData<>();
+        db.collection(BOOKED)
+                .add(bookedClassroom)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "addBookedClassroom: adding booked complete");
+                        booked.postValue(true);
+                    }
+                });
+        return booked;
+    }
 
     public LiveData<List<Classroom>> getClassroom() {
 

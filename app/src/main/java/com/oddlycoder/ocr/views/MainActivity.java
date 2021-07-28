@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void startAuthActivity() {
         startActivity(AuthActivity.start(this));
+        finish();
     }
 
     @Override
