@@ -20,6 +20,11 @@ when classes get rescheduled in my university.
 
 ## Screenshots
 
+### Home Screen
 ![Home Screen](./home.png)
+
+### Classroom Detail Dialog
 ![Classroom Detail Dialog](./dialog.png)
+
+### Search Screen
 ![Search Screen](./search.png)
