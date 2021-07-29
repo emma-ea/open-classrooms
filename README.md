@@ -21,10 +21,10 @@ when classes get rescheduled in my university.
 ## Screenshots
 
 ### Home Screen
-![Home Screen](./home.png)
+<img src="./home.png" alt="home screen" width="200"/>
 
 ### Classroom Detail Dialog
-![Classroom Detail Dialog](./dialog.png)
+<img src="./dialog.png" alt="dialog screen" width="200"/>
 
 ### Search Screen
-![Search Screen](./search.png)
+<img src="./search.png" alt="search screen" width="200"/>
