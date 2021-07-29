@@ -17,3 +17,9 @@ timetable uses NoSql Firestore documents, this helps to easily filter or find em
 The app idea was to solve issues that arise when class leads have to search for empty classrooms 
  
 when classes get rescheduled in my university.
+
+## Screenshots
+
+![Home Screen](./home.png)
+![Classroom Detail Dialog](./dialog.png)
+![Search Screen](./search.png)
