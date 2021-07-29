@@ -31,7 +31,6 @@ public class HomeViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Classroom>> getClassrooms() {
-        Log.d(TAG, "service getClassroom: view Model");
         return repository.getClassroom();
     }
 

@@ -48,6 +48,6 @@ public class Classroom implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return String.format("classroom: %s", getClassroom());
+        return String.format("Classroom: %s", getClassroom());
     }
 }

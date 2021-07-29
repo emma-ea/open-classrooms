@@ -22,8 +22,7 @@ public class FirebaseUserSetup {
     private Student student;
 
     private final FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-
-    private MutableLiveData<Student> studentDetail = new MutableLiveData<>();
+    private final MutableLiveData<Student> studentDetail = new MutableLiveData<>();
 
     boolean success = false;
 
@@ -36,7 +35,7 @@ public class FirebaseUserSetup {
     }
 
     public LiveData<Student> getStudentDetail(String uuid) {
-        firestore.collection("users")
+        firestore.collection(USERS)
                 .document(uuid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -59,7 +58,6 @@ public class FirebaseUserSetup {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // todo: handle response
                         if (task.isSuccessful()) {
                             isUpdated.postValue(true);
                         }
@@ -81,7 +79,7 @@ public class FirebaseUserSetup {
                 .document(authKey)
                 .set(studentData)
                 .addOnCompleteListener((listener) -> {
-                    //TODO: handle response9
+                    //TODO: handle response
                     success = true;
                 });
     }

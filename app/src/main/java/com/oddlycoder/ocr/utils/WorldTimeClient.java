@@ -30,7 +30,6 @@ public class WorldTimeClient {
     }
 
     public Call<WorldClock> start() {
-        Log.i(TAG, "start: getting time");
         return service.getTime();
     }
 

@@ -130,9 +130,6 @@ public class AvailableClassroomsAdapter extends RecyclerView.Adapter<AvailableCl
             Toast.makeText(itemView.getContext(), mClassroom.getText(), Toast.LENGTH_SHORT).show();
             ClassroomDialog.newInstance(classroom)
                     .show(((MainActivity) context).getSupportFragmentManager(), "classroom_dialog");
-            /*Dialog detailDialog = new AlertDialog.Builder(itemView.getContext())
-                    .setView(R.layout.classroom_item_selected_dialog)
-                    .show();*/
         }
     }
 

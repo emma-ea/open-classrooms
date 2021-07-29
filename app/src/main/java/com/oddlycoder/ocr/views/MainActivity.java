@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .replace(R.id.container, HomeFragment.class, null)
                 .commit();
-        Log.d(TAG, "homeFragment: ");
     }
 
     public void searchFragment() {
@@ -81,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .replace(R.id.container, SearchFragment.class, null)
                 .commit();
-        Log.d(TAG, "searchFragment: ");
     }
 
     public void profileFragment() {
@@ -90,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .replace(R.id.container, ProfileFragment.class, null)
                 .commit();
-        Log.d(TAG, "profileFragment: ");
     }
 
     public void bookedFragment() {

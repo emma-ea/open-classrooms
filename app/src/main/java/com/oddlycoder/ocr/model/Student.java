@@ -13,7 +13,12 @@ public class Student implements Serializable {
 
     public Student() { }
 
-    public Student(String profileImageUrl, String username, String fullName, String courseProgram, String year, String email) {
+    public Student(String profileImageUrl,
+                   String username,
+                   String fullName,
+                   String courseProgram,
+                   String year,
+                   String email) {
         this.profileImageUrl = profileImageUrl;
         this.username = username;
         this.fullName = fullName;

@@ -78,7 +78,6 @@ public class AuthActivity extends AppCompatActivity implements UserSignOut {
 
     private final View.OnClickListener buttonListener = action -> {
         signIn();
-        Log.i(TAG, "Button pressed: Auth");
     };
 
 
@@ -110,7 +109,6 @@ public class AuthActivity extends AppCompatActivity implements UserSignOut {
                         "",
                         user.getEmail()
                 );
-                Log.d(TAG, "firebaseAuthWithGoogle: user not null. creating user");
                 authViewModel.setUpStudentDetail(student, uuid);
             }
             startActivity(MainActivity.start(AuthActivity.this));
@@ -128,7 +126,6 @@ public class AuthActivity extends AppCompatActivity implements UserSignOut {
         Intent signInIntent = mSignInClient.getSignInIntent();
         // startActivityForResult(signInIntent, RC_SIGN_IN);
         startGoogleAuthIntent.launch(signInIntent);
-        //TODO: not working as expected. fix error
         hideButton();
     }
 
@@ -141,14 +138,10 @@ public class AuthActivity extends AppCompatActivity implements UserSignOut {
                     try {
                         GoogleSignInAccount account = task.getResult(ApiException.class);
                         if (account != null) {
-                            Log.d(TAG, "onActivityResult: " + account.getId());
                             firebaseAuthWithGoogle(account.getIdToken());
                         }
-                    } catch (ApiException e) {
-                        Log.w(TAG, "onActivityResult: ", e);
-                    }
+                    } catch (ApiException e) { }
                 } else {
-                    Log.d(TAG, "Couldn't start goog auth: ");
                     snackMessage("Couldn't start authentication. Please try again");
                     showButton();
                 }
@@ -160,12 +153,9 @@ public class AuthActivity extends AppCompatActivity implements UserSignOut {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isComplete()) {
-                        Log.d(TAG, "signInWithCredential: Success");
                         FirebaseUser user = mAuth.getCurrentUser();
-                        snackMessage("Authentication successful, Please wait");
                         startMainActivity(user, user.getUid());
                     } else {
-                        Log.w(TAG, "signInWithCredential: Failure", task.getException());
                         // auth failed
                         snackMessage("");
                         startMainActivity(null, "");
@@ -187,7 +177,6 @@ public class AuthActivity extends AppCompatActivity implements UserSignOut {
         GoogleSignIn.getClient(this, gso).signOut()
                 .addOnCompleteListener((listener) -> {
                     mAuth.signOut();
-                    Log.d(TAG, "googleSignOut: user account disconnected.");
                 });
     }
 

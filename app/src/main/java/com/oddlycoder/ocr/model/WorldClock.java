@@ -146,6 +146,10 @@ public class WorldClock {
     @NonNull
     @Override
     public String toString() {
-        return String.format("id: %s currentDateTime: %s dayOfWeek %s", get$id(), getCurrentDateTime(), getDayOfTheWeek());
+        return String.format(
+                "id: %s currentDateTime: %s dayOfWeek %s",
+                get$id(),
+                getCurrentDateTime(),
+                getDayOfTheWeek());
     }
 }

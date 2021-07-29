@@ -118,7 +118,6 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
 
     private void setRefreshLayout() {
         refreshLayout.setOnRefreshListener(() -> {
-            Log.d(TAG, "onRefresh: reloading classroomData()");
             classroomData();
             refreshLayout.setRefreshing(false);
         });
@@ -154,7 +153,6 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
 
     private void initUpcoming() {
         String[] times = getResources().getStringArray(R.array.upcoming_time);
-        Log.d(TAG, "initUpcoming: setting adapter");
         upcomingAdapter = new UpcomingTimeAdapter(new ArrayList<>(Arrays.asList(times)), this);
         mUpcomingTimes.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         mUpcomingTimes.setAdapter(upcomingAdapter);
@@ -171,9 +169,7 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
                 if (!classrooms.isEmpty())
                     mRecyclerLoading.setVisibility(View.GONE);
 
-                if (classrooms.size() == 0) {
-                    Log.d(TAG, "onChanged: returned empty result");
-                }
+//                if (classrooms.size() == 0) { }
 
                 if (mRecyclerLoading.getVisibility() == View.GONE) {
                     setUserMsgWeekends();
@@ -184,7 +180,6 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
     }
 
     private List<Classroom> filterList(List<Classroom> classrooms, int filterId) {
-        Log.d(TAG, "filterList: filtering with " + filterId);
         List<Classroom> newClassroomList = new ArrayList<>();
         for (Classroom classroom : classrooms) {
             for (Day day : classroom.getWeek()) {
@@ -253,10 +248,8 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
 
                 String dday = day.getDay().trim();
                 if (dday.equalsIgnoreCase("saturday") || dday.equalsIgnoreCase("sunday")) {
-                    Log.d(TAG, "filterList: class not available on weekends");
                     //TODO: alert user with dialog, classrooms not available on weekends
                 }
-
             }
         }
         return newClassroomList;
@@ -265,19 +258,16 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
     private String date;
 
     private void getDayOfWeek() {
-
         // use local date if web fails
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.ENGLISH); // i just want the day
         date = sdf.format(c.getTime());
-        Log.d(TAG, "getDayOfWeek: " + date);
 
         mHomeOCRText.setText(String.format("Hello, it's %s", date));
 
         homeViewModel.getClock().observe(getViewLifecycleOwner(), timeObserver -> {
             mHomeOCRText.setText(String.format("Hello, it's %s", timeObserver.getDayOfTheWeek()));
         });
-        Log.i(TAG, "getDayOfWeek: day set");
     }
 
     private void logout() {
@@ -317,25 +307,6 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         callback = (HomeCallbacks) context;
-       /* if (getActivity() != null) {
-            getActivity().getOnBackPressedDispatcher().addCallback(, new OnBackPressedCallback(true) {
-                @Override
-                public void handleOnBackPressed() {
-                    Log.d(TAG, "handleOnBackPressed: home fragment back press");
-                    if (exitCount == 0)
-                        snackMessage("Press back button again to exit app");
-                    if (exitCount == 1)
-                        snackMessage("Press back button one more time to exit");
-                    if (exitCount >= 2)
-                        getActivity().finish();
-                    exitCount++;
-                    // reset exitCount after 2 seconds if user has pressed back button.
-                    Executors.newSingleThreadScheduledExecutor()
-                            .schedule(()-> exitCount = 0, 2000L, TimeUnit.MILLISECONDS);
-                }
-            });
-
-        }*/
     }
 
     @Override

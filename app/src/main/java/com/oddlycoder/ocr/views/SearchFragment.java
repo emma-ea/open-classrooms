@@ -115,7 +115,6 @@ public class SearchFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private final AdapterView.OnItemClickListener itemClickListener = (adapter, view, pos, lPos) -> {
-        Log.d(TAG, "adapter item clicked: at " + pos + "view: " + view);
         InputMethodManager ims = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         ims.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
         binding.searchResultInclude.searchResultParent.setVisibility(View.VISIBLE);

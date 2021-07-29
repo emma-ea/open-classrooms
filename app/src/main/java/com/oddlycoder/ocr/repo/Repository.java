@@ -60,20 +60,16 @@ public class Repository implements IRepository {
             }
 
             @Override
-            public void onFailure(Call<WorldClock> call, Throwable t) {
-                Log.e(TAG, "onFailure: time fetch failed", t);
-            }
+            public void onFailure(Call<WorldClock> call, Throwable t) { }
         });
     }
 
     @Override
     public LiveData<WorldClock> getClock() {
         return this.clock;
-
     }
 
     public LiveData<List<Classroom>> getClassroom() {
-        Log.d(TAG, "getClassroom: repository");
         return fs.getClassroom();
     }
 
@@ -82,7 +78,6 @@ public class Repository implements IRepository {
     }
 
     public LiveData<Student> getUserDetail(String uuid) {
-        //TODO: get user detail
         return userSetup.getStudentDetail(uuid);
     }
 

@@ -54,9 +54,7 @@ public class FirestoreProducer implements Runnable {
         Observable<BlockingQueue<CollectionReference>> observable = Observable.just(requestQueue);
         observable.subscribe(new Observer<BlockingQueue<CollectionReference>>() {
             @Override
-            public void onSubscribe(@NonNull Disposable d) {
-
-            }
+            public void onSubscribe(@NonNull Disposable d) { }
 
             @Override
             public void onNext(@NonNull BlockingQueue<CollectionReference> queue) {
@@ -68,13 +66,10 @@ public class FirestoreProducer implements Runnable {
                                     if (tasks.isSuccessful() && tasks.getResult() != null) {
                                         // hours for every day
                                         for (QueryDocumentSnapshot snapshot : tasks.getResult()) {
-                                            // Log.d(TAG, "run: parent id --> " + ref.getParent().getId() + " ref id --> " + ref.getId() + " data id --> " + snapshot.getId() + " --> data " + snapshot.getData());
-
                                             TTable hours = snapshot.toObject(TTable.class);
                                             Day day = new Day();
                                             day.setDay(ref.getId());
                                             day.setTtables(hours);
-                                            //Log.d(TAG, "run: day: " + day.getDay() + " hours: " + day.getTtables());
                                             week.add(day);
                                         }
                                     }
@@ -87,16 +82,10 @@ public class FirestoreProducer implements Runnable {
             }
 
             @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
+            public void onError(@NonNull Throwable e) { }
 
             @Override
             public void onComplete() {
-               /* for (Classroom_rv c : classroomList) {
-                    Log.d(TAG, "run onComplete obs: classroom rv: " + c.getClassroom()
-                            + " day: --> " + Arrays.toString(c.getWeek().toArray()));
-                }*/
                 classroomData.postValue(classroomList);
             }
         });
@@ -113,19 +102,14 @@ public class FirestoreProducer implements Runnable {
                             if (tasks.isSuccessful() && tasks.getResult() != null) {
                                 // hours for every day
                                 for (QueryDocumentSnapshot snapshot : tasks.getResult()) {
-                                    // Log.d(TAG, "run: parent id --> " + ref.getParent().getId() + " ref id --> " + ref.getId() + " data id --> " + snapshot.getId() + " --> data " + snapshot.getData());
-
                                     TTable hours = snapshot.toObject(TTable.class);
                                     Day day = new Day();
                                     day.setDay(ref.getId());
                                     day.setTtables(hours);
-                                    Log.d(TAG, "run: thread day: " + day.getDay() + "hours: " + day.getTtables());
                                     week.add(day);
                                 }
                             }
                             for (Classroom c : classroomList) {
-                                Log.d(TAG, "run: thread classroom rv: " + c.getClassroom()
-                                        + "day: --> " + Arrays.toString(c.getWeek().toArray()));
                             }
                             classroomData.postValue(classroomList);
                         });

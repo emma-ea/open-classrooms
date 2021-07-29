@@ -115,8 +115,7 @@ public class ProfileFragment extends Fragment {
 
     private void deleteAccount() {
         deleteAccount.setOnClickListener(listener -> {
-            Log.d(TAG, "deleteAccount: google sign out. moving to auth screen");
-            callbacks.deleteProfile();       
+            callbacks.deleteProfile();
         });
     }
 

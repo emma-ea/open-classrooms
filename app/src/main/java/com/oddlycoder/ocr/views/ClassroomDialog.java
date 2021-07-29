@@ -118,27 +118,24 @@ public class ClassroomDialog extends DialogFragment {
                         try {
                             switch (timeDifference(time, upcoming24hr)) {
                                 case EARLY:
-                                    Log.d(TAG, "onViewCreated: early with " + remainingHrs + " " + remainingMins);
                                     rTime = String.format(Locale.ENGLISH, "%s %dhrs %dmins", EARLY, remainingHrs, remainingMins);
                                     break;
                                 case IN:
-                                    Log.d(TAG, "onViewCreated: in with " + remainingHrs + " " + remainingMins);
                                     rTime = String.format(Locale.ENGLISH,"%s %dhrs %dmins", IN, remainingHrs, remainingMins);
                                     break;
                                 case MISSED:
-                                    Log.d(TAG, "onViewCreated: missed  with " + remainingHrs + " " + remainingMins);
                                     rTime = String.format(Locale.ENGLISH,"%s %dhrs %dmins", MISSED, remainingHrs, remainingMins);
-//                                    missedSessionImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_missed));
                                     missedSessionImg.setImageDrawable(ResourcesCompat.getDrawable(
                                             this.requireActivity().getResources(), R.drawable.ic_missed, null));
                                     break;
                                 default:
-                                    Log.d(TAG, "onViewCreated: something went wrong");
+                                    Toast.makeText(
+                                            ClassroomDialog.this.requireActivity(),
+                                            "something went wrong",
+                                            Toast.LENGTH_SHORT).show();
                             }
 
-                        } catch (ParseException pe) {
-                            Log.e(TAG, "onViewCreated: ", pe);
-                        }
+                        } catch (ParseException pe) { }
                     }
 
                     if (!rTime.trim().isEmpty()) {
@@ -149,10 +146,6 @@ public class ClassroomDialog extends DialogFragment {
 
                     classroomTime.setText(upcoming);
                     ttlClassroom.setText(ftime);
-
-                    if (day.getClassHours().containsValue("")) {
-                    }
-
                 }
             }
 
@@ -176,7 +169,6 @@ public class ClassroomDialog extends DialogFragment {
     }
 
     private void sendMessage() {
-        Log.d(TAG, "sendMessage: notifying others");
         sendMessageBtn.setOnClickListener(listener -> {
             String date = DateUtil.getDayOrTime(DateUtil.TIME);
             String classroomId = classroomName.getText().toString();
@@ -194,7 +186,6 @@ public class ClassroomDialog extends DialogFragment {
                 viewModel.addBooked(bookedClassroom).observe(getViewLifecycleOwner(), result -> {
                     if (result) {
                         Toast.makeText(ClassroomDialog.this.requireActivity(), message, Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "sendMessage: users will be notified");
                         ClassroomDialog.this.dismiss();
                     }
                 });
