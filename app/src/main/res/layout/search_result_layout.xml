@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_result_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FBFBFB"
     android:padding="20dp">
 
     <TextView
         android:id="@+id/classroom"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="classroom"
-        android:gravity="center_vertical"
-        android:paddingStart="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/classroom_bg"
+        android:backgroundTint="@color/item1_bg"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="10dp"
+        android:fontFamily="@font/work_sans"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:drawableStartCompat="@drawable/ic_booked_header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        tools:text="classroom" />
 
-    <TextView
-        android:id="@+id/week"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_result_recycler_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        tools:text="Week"
-        android:gravity="center_vertical"
-        android:paddingStart="10dp"
-        android:background="@drawable/classroom_bg"
-        app:layout_constraintTop_toBottomOf="@id/classroom"
-        app:layout_constraintStart_toStartOf="parent"/>
-
+        android:layout_marginTop="3dp"
+        tools:itemCount="3"
+        tools:listitem="@layout/search_result_layout_recycler_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classroom"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/booked_item_parent"
+    android:paddingBottom="25dp">
+
+    <TextView
+        android:id="@+id/booked_classroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Classroom name"
+        android:background="@drawable/search_background"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:drawableStartCompat="@drawable/ic_booked_header" />
+
+    <TextView
+        android:id="@+id/booked_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Booked Message"
+        android:background="@drawable/search_background"
+        android:backgroundTint="@color/upcoming_item_border"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/booked_classroom" />
+
+    <TextView
+        android:id="@+id/booked_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Booked time"
+        android:background="@drawable/search_background"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/booked_message"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

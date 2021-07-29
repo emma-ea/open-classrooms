@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +19,13 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.oddlycoder.ocr.R;
 import com.oddlycoder.ocr.model.BookedClassroom;
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Day;
+import com.oddlycoder.ocr.model.Student;
 import com.oddlycoder.ocr.utils.DateUtil;
 import com.oddlycoder.ocr.viewmodel.ClassroomDialogViewModel;
 import com.oddlycoder.ocr.views.adapter.UpcomingTimeAdapter;
@@ -51,6 +55,9 @@ public class ClassroomDialog extends DialogFragment {
     private ClassroomDialogViewModel viewModel;
 
     private int remainingHrs, remainingMins;
+
+    private Student student = null;
+    private Classroom classroom;
 
     public static ClassroomDialog newInstance(Classroom classroom) {
         Bundle bundle = new Bundle();
@@ -92,7 +99,7 @@ public class ClassroomDialog extends DialogFragment {
         dialogClose.setOnClickListener((listener) -> dismiss());
 
         if (getArguments() != null) {
-            Classroom classroom = (Classroom) getArguments().getSerializable(DIALOG_TAG);
+            classroom = (Classroom) getArguments().getSerializable(DIALOG_TAG);
             classroomName.setText(classroom.getClassroom());
             for (Day day : classroom.getWeek()) {
                 if (day.getDay().equalsIgnoreCase(DateUtil.getDayOrTime(DateUtil.DAY))) {
@@ -121,8 +128,9 @@ public class ClassroomDialog extends DialogFragment {
                                 case MISSED:
                                     Log.d(TAG, "onViewCreated: missed  with " + remainingHrs + " " + remainingMins);
                                     rTime = String.format(Locale.ENGLISH,"%s %dhrs %dmins", MISSED, remainingHrs, remainingMins);
-                                    missedSessionImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_missed));
-                                    //missedSessionImg.setImageDrawable(ResourcesCompat.getDrawable(Resources., R.drawable.ic_missed));
+//                                    missedSessionImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_missed));
+                                    missedSessionImg.setImageDrawable(ResourcesCompat.getDrawable(
+                                            this.requireActivity().getResources(), R.drawable.ic_missed, null));
                                     break;
                                 default:
                                     Log.d(TAG, "onViewCreated: something went wrong");
@@ -149,27 +157,54 @@ public class ClassroomDialog extends DialogFragment {
             }
 
         }
-        sendMessage();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            viewModel.getUserInfo(user.getUid()).observe(getViewLifecycleOwner(), student -> {
+                this.student = student;
+            });
+        }
+        //TODO: booked feature disabled, t.o.l
+        // sendMessage();
+        // TODO: let user know
+        sendMessageBtn.setOnClickListener(l -> Toast.makeText(
+                ClassroomDialog.this.requireActivity(), "Feature disabled.", Toast.LENGTH_SHORT).show());
     }
 
     private void sendMessage() {
-        // TODO: send message
+        Log.d(TAG, "sendMessage: notifying others");
         sendMessageBtn.setOnClickListener(listener -> {
-            BookedClassroom bookedClassroom =
-                    new BookedClassroom();
-            // TODO to view model
+            String date = DateUtil.getDayOrTime(DateUtil.TIME);
+            String classroomId = classroomName.getText().toString();
+            String message = String.format("%s wants to move a rescheduled class to %s between %s",
+                    student.getFullName(),
+                    classroomId,
+                    classroomTime.getText().toString()
+            );
+            if (student != null) {
+                BookedClassroom bookedClassroom = new BookedClassroom(
+                        classroomId,
+                        message,
+                        date
+                );
+                viewModel.addBooked(bookedClassroom).observe(getViewLifecycleOwner(), result -> {
+                    if (result) {
+                        Toast.makeText(ClassroomDialog.this.requireActivity(), message, Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "sendMessage: users will be notified");
+                        ClassroomDialog.this.dismiss();
+                    }
+                });
+            }
         });
     }
 
     private Session timeDifference(String currentTime, String upcoming) throws ParseException, NullPointerException {
 
         Session session;
-        // TODO: time difference
-        // add 1 hour to current time
-        // if more than last of upcoming
-        // user missed the session
-        // if its less than the beginning, user has oppor
-        // if its more than beginning and less than last, user is within session.
         String beginningTime = splitUpcoming(upcoming, SplitTimeBy.BEGINNING);
         String endingTime = splitUpcoming(upcoming, SplitTimeBy.ENDING);
 
@@ -185,14 +220,6 @@ public class ClassroomDialog extends DialogFragment {
         int currentEndingResHrs = (int) ((currentEndingDiff/(1000*60*60) % 24));
         int currentEndingResMins = (int) ((currentEndingDiff/(1000*60) % 60));
 
-        // negative means.. student is can use session // session will start in res hours
-        // 0 means.. session time is active // session may end soon
-        // positive means.. student missed session // missed session by res hours
-        // 2. positive means.. student in session.. res mins into session
-
-        // if cBTime is negative.. student is res hrs & mins before session
-        // if cBTime is positive.. add to bTime.. if its less than eTime.. student
-        // in session, if its more than eTime, student missed session.
         int begTimeHrs = (int) ((bTime.getTime() / (1000 * 60 * 60)) % 24);
         int begTimeMins = (int) ((bTime.getTime() / (1000 * 60) % 60));
         int eTimeHrs = (int) ((eTime.getTime() / (1000 * 60 * 60)) % 24);
@@ -207,23 +234,10 @@ public class ClassroomDialog extends DialogFragment {
             session = Session.IN;
             remainingHrs = Math.abs(currentBeginningResHrs + begTimeHrs);
             remainingMins = Math.abs(currentBeginningResMins + begTimeMins);
-            /*if ((currentBeginningResHrs + begTimeHrs) < eTimeHrs) {
-                session = Session.IN;
-            }*/
         } else {
             session = Session.MISSED;
             remainingHrs = Math.abs(currentBeginningResHrs);
             remainingMins = Math.abs(currentBeginningResMins);
-        }
-
-        Log.d(TAG, "timeDifference: currentBeginningDiff: Hrs: " + currentBeginningResHrs + " Mins: " + currentBeginningResMins );
-        Log.d(TAG, "timeDifference: currentEndingDiff: Hrs" + currentEndingResHrs + " Mins: " + currentEndingResMins);
-
-        try {
-            Log.d(TAG, "timeDifference: beginning: " + bTime.toString() + " ending: " + eTime.toString() + " current: " + cTime.toString() );
-            Log.d(TAG, "timeDifference: beginning: " + beginningTime + " ending: " + endingTime + " current: " + currentTime);
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
         }
 
         return session;
@@ -240,8 +254,3 @@ public class ClassroomDialog extends DialogFragment {
 
     enum Session { EARLY, IN, MISSED}
 }
-
-
-// if current time is more than selected time.
-// you missed this period [red text formatting]
-// else show: minutes to live [ green text formatting]

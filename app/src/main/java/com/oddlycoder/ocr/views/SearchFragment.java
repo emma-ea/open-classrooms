@@ -1,5 +1,6 @@
 package com.oddlycoder.ocr.views;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -32,6 +34,7 @@ import com.oddlycoder.ocr.viewmodel.HomeViewModel;
 import com.oddlycoder.ocr.viewmodel.SearchViewModel;
 import com.oddlycoder.ocr.views.adapter.SearchAdapter;
 import com.oddlycoder.ocr.views.adapter.SearchListAdapter;
+import com.oddlycoder.ocr.views.adapter.SearchResultAdapter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -64,7 +67,7 @@ public class SearchFragment extends Fragment {
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-        binding = FragmentSearchBinding.inflate(inflater);
+        binding = FragmentSearchBinding.inflate(inflater, container, false);
         view = binding.getRoot();
         return view;
     }
@@ -86,6 +89,7 @@ public class SearchFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onStart() {
         super.onStart();
@@ -109,8 +113,11 @@ public class SearchFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private final AdapterView.OnItemClickListener itemClickListener = (adapter, view, pos, lPos) -> {
         Log.d(TAG, "adapter item clicked: at " + pos + "view: " + view);
+        InputMethodManager ims = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        ims.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
         binding.searchResultInclude.searchResultParent.setVisibility(View.VISIBLE);
         setSelectedInformation((Classroom) searchListAdapter.getItem(pos));
     };
@@ -118,8 +125,15 @@ public class SearchFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void setSelectedInformation(Classroom classroom) {
         binding.searchResultInclude.classroom.setText(classroom.getClassroom());
-        StringBuilder builder = new StringBuilder();
-        for (Day day : classroom.getWeek()) {
+        binding.searchResultInclude.searchResultRecyclerView.setLayoutManager(
+                new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+
+        SearchResultAdapter resultAdapter = new SearchResultAdapter(classroom.getWeek());
+        binding.searchResultInclude.searchResultRecyclerView.setAdapter(resultAdapter);
+        resultAdapter.notifyDataSetChanged();
+
+        //StringBuilder builder = new StringBuilder();
+        /*for (Day day : classroom.getWeek()) {
             builder.append(day.getDay());
             day.getClassHours().forEach((hourkey, hourValue) -> {
                 if (hourValue == null || hourValue.isEmpty()) {
@@ -127,8 +141,8 @@ public class SearchFragment extends Fragment {
                 }
             });
             builder.append("\n");
-        }
-        binding.searchResultInclude.week.setText(builder);
+        }*/
+        // binding.searchResultInclude.dayOfWeek.setText(builder);
     }
 
     private void initSearchListAdapter(List<Classroom> classrooms) {

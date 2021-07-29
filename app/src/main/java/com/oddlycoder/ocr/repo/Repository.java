@@ -94,6 +94,10 @@ public class Repository implements IRepository {
         return fs.addBookedClassroom(bookedClassroom);
     }
 
+    public LiveData<List<BookedClassroom>> getBookedClassrooms() {
+        return fs.getBookedClassrooms();
+    }
+
 }
 
 

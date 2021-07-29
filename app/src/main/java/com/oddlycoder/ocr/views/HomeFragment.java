@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         mParent = view.findViewById(R.id.fragHomeParent);
         mAvailableClassrooms = view.findViewById(R.id.available_classrooms_recyclerview);
         mUpcomingTimes = view.findViewById(R.id.upcoming_times_recyclerview);
-        mHomeOCRText = view.findViewById(R.id.home_ocr_text);
+        mHomeOCRText = view.findViewById(R.id.booked_header);
         mRecyclerLoading = view.findViewById(R.id.recycler_progress);
         userMsgWeekends = view.findViewById(R.id.home_frag_weekend_msg);
         userMsgText = view.findViewById(R.id.msg_text_weekends);
@@ -91,8 +91,8 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
         refreshLayout = view.findViewById(R.id.swipe_refresh_layout);
 
         view.findViewById(R.id.close_app).setOnClickListener(v -> {
-            logout();
             FirebaseAuth.getInstance().signOut();
+            startAuth(); // auth activity
         });
 
         return view;
@@ -282,6 +282,9 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
 
     private void logout() {
         callback.logout();  // todo: handle response from logout and run startAuthActivity
+    }
+
+    private void startAuth() {
         callback.startAuthActivity();
     }
 

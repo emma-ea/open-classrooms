@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.oddlycoder.ocr.R;
 
 import java.util.concurrent.Executors;
@@ -56,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements
             case R.id.profile_menu:
                 profileFragment();
                 break;
+                //TODO: disabled booked feature, t.o.l
+            // TODO: uncomment item in nav menu and here to reinstate
+            /*case R.id.booked_menu:
+                bookedFragment();
+                break;*/
         }
         return true;
     };
@@ -87,6 +93,14 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "profileFragment: ");
     }
 
+    public void bookedFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .replace(R.id.container, BookedListFragment.class, null)
+                .commit();
+    }
+
     private void snackMessage(String message) {
         if (message.isEmpty())
             message = getString(R.string.error_sigining_in);
@@ -102,7 +116,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void logout() {
-        authActivity.googleSignOut();
+        // authActivity.googleSignOut();
+        FirebaseAuth.getInstance().signOut();
     }
 
     @Override

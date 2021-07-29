@@ -14,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.oddlycoder.ocr.model.BookedClassroom;
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Day;
@@ -61,6 +62,22 @@ public class FirestoreService {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "addBookedClassroom: adding booked complete");
                         booked.postValue(true);
+                    }
+                });
+        return booked;
+    }
+
+    public LiveData<List<BookedClassroom>> getBookedClassrooms() {
+        MutableLiveData<List<BookedClassroom>> booked = new MutableLiveData<>();
+        List<BookedClassroom> list = new ArrayList<>();
+        db.collection(BOOKED)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
+                        for (DocumentSnapshot snapshot : task.getResult()) {
+                            list.add(snapshot.toObject(BookedClassroom.class));
+                        }
+                        booked.postValue(list);
                     }
                 });
         return booked;

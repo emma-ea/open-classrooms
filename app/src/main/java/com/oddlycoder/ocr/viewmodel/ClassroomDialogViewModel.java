@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.oddlycoder.ocr.model.BookedClassroom;
+import com.oddlycoder.ocr.model.Student;
 import com.oddlycoder.ocr.repo.Repository;
 
 public class ClassroomDialogViewModel extends AndroidViewModel {
@@ -20,6 +21,10 @@ public class ClassroomDialogViewModel extends AndroidViewModel {
 
     public LiveData<Boolean> addBooked(BookedClassroom bookedClassroom) {
         return repository.addBooked(bookedClassroom);
+    }
+
+    public LiveData<Student> getUserInfo(String uuid) {
+        return repository.getUserDetail(uuid);
     }
 
 }

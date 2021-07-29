@@ -30,6 +30,7 @@
     <string name="profile_frag_year">Year</string>
     <string name="home_frag_upcoming">Upcoming</string>
     <string name="home_frag_available">Available</string>
+    <string name="booked">Booked</string>
     <string-array name="upcoming_time">
         <item>View All</item>
         <item>8am - 9am</item>
