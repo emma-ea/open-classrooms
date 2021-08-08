@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    style="@style/homeSubTextStyle"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,9 +29,7 @@
             android:layout_marginTop="3dp"
             android:fontFamily="@font/work_sans"
             android:text="@string/profile_text_welcome"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            style="@style/profileHeader"
             app:layout_constraintBottom_toBottomOf="@id/ic_profile_ocr_image"
             app:layout_constraintStart_toEndOf="@id/ic_profile_ocr_image"
             app:layout_constraintTop_toTopOf="@id/ic_profile_ocr_image"

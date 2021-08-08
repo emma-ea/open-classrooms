@@ -62,7 +62,7 @@ public class HomeFragment extends Fragment implements UpcomingTimeAdapter.Filter
     private AvailableClassroomsAdapter adapter;
     private UpcomingTimeAdapter upcomingAdapter;
 
-    private List<Classroom> classroomsl = new ArrayList<>() ;
+    private List<Classroom> classroomsl = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

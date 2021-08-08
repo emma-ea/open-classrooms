@@ -1,31 +1,20 @@
 package com.oddlycoder.ocr.fc;
 
-import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.oddlycoder.ocr.model.BookedClassroom;
 import com.oddlycoder.ocr.model.Classroom;
 import com.oddlycoder.ocr.model.Day;
-import com.oddlycoder.ocr.model.TTable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.Objects;
 
 public class FirestoreService {
 
@@ -65,7 +54,8 @@ public class FirestoreService {
         return booked;
     }
 
-    public LiveData<List<Classroom>> getClassroom() {
+    @SuppressWarnings("unchecked cast")
+    public LiveData<List<Classroom>> getClassrooms() {
 
         List<Classroom> classrooms = new ArrayList<>();
 
@@ -80,10 +70,10 @@ public class FirestoreService {
                             Log.d(TAG, "getClassroom: document id: " + documentSnapshot.getId());
 
                             List<Day> week = new ArrayList<>();
-                            for (String key : documentSnapshot.getData().keySet()) {
+                            for (String key : Objects.requireNonNull(documentSnapshot.getData()).keySet()) {
                                 Day day = new Day();
                                 day.setDay(key);
-                                Map<String, String> hours = (Map) documentSnapshot.getData().get(key);
+                                Map<String, String> hours = (Map<String, String>) documentSnapshot.getData().get(key);
                                 day.setHours(hours);
                                 week.add(day);
                             }

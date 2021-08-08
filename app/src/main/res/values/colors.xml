@@ -21,8 +21,9 @@
     <color name="item2_img">#439B47</color>
     <color name="item3_bg">#FFA9C4</color>
     <color name="item3_img">#BE8395</color>
-
     <color name="dialog_close_btn">#FF3D00</color>
-
     <color name="upcoming_selected_item">#E5E5E5</color>
+    <color name="colorSecondaryDark">#101820FF</color>
+    <color name="bottomNavDark">#111517</color>
+    <color name="bottomItemSelected">#3F51B5</color>
 </resources>

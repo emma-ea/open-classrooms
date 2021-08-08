@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_auth.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2013888888888889" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/available_class_item.xml" value="0.12972972972972974" />
+        <entry key="app/src/main/res/layout/booked_list_item.xml" value="0.12972972972972974" />
+        <entry key="app/src/main/res/layout/classroom_item_selected_dialog.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_booked_list.xml" value="0.12972972972972974" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.12972972972972974" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.12972972972972974" />
+        <entry key="app/src/main/res/layout/profile_edit.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/search_item_view.xml" value="0.12972972972972974" />
+        <entry key="app/src/main/res/layout/search_result_layout.xml" value="0.12972972972972974" />
+        <entry key="app/src/main/res/layout/search_result_layout_recycler_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/upcoming_time_item.xml" value="0.12972972972972974" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.14256756756756755" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

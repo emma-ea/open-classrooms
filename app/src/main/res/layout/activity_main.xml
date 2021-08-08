@@ -7,21 +7,29 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/container"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_anchor="@id/bottom_nav_bar"/>
+        android:orientation="vertical">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav_bar"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:backgroundTint="@color/bottom_nav_bg_tint"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:menu="@menu/activity_bottom_menu"/>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:name="com.oddlycoder.ocr.views.HomeFragment"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:layout_anchor="@id/bottom_nav_bar"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_nav_bar"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_gravity="bottom"
+            style="@style/bottomNavStyle"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+            app:menu="@menu/activity_bottom_menu"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

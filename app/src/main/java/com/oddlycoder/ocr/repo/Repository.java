@@ -1,10 +1,7 @@
 package com.oddlycoder.ocr.repo;
 
 import android.content.Context;
-import android.os.Build;
-import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -70,7 +67,7 @@ public class Repository implements IRepository {
     }
 
     public LiveData<List<Classroom>> getClassroom() {
-        return fs.getClassroom();
+        return fs.getClassrooms();
     }
 
     public void setUpNewUser(Student student, String Uuid) {

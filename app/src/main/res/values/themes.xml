@@ -12,8 +12,21 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
         <!-- Customize your theme here. -->
+    </style>
 
+    <style name="authStyle" parent="Theme.OCR">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
+    <style name="splashStyle" parent="Theme.OCR">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="bottomNavStyle" parent="Theme.OCR">
+        <item name="backgroundTint">@color/bottom_nav_bg_tint</item>
+        <item name="background">@color/white</item>
     </style>
 
     <style name="progressStyle" parent="Theme.OCR">
@@ -28,10 +41,40 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-    <style name="textFont" parent="Theme.OCR">
+    <style name="homeHeadersStyle" parent="Theme.OCR">
         <item name="android:fontFamily">@font/work_sans_bold</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="profileHeader" parent="Theme.OCR">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="autocompleteTextStyle" parent="Theme.OCR">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
+    </style>
+
+    <style name="searchSubTextStyle" parent="Theme.OCR">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="classroomSelectedStyle" parent="Theme.OCR">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="searchResultHeaderStyle">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="searchItemStyle">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>

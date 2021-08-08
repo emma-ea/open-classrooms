@@ -31,9 +31,7 @@
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="10dp"
-                android:fontFamily="@font/lato_light"
-                android:textSize="15sp"
-                android:textColor="@color/black"
+                style="@style/searchItemStyle"
                 android:paddingTop="10dp"
                 android:paddingBottom="18dp"/>
 
@@ -65,9 +63,7 @@
                 android:drawablePadding="10dp"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="10dp"
-                android:fontFamily="@font/lato_light"
-                android:textSize="15sp"
-                android:textColor="@color/black"
+                style="@style/searchItemStyle"
                 android:paddingTop="10dp"
                 android:paddingBottom="18dp"
                 app:drawableStartCompat="@drawable/ic_list"

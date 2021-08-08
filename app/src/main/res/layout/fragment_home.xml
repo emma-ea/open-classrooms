@@ -64,7 +64,7 @@
 
                 <TextView
                     android:id="@+id/upcoming_text"
-                    style="@style/textFont"
+                    style="@style/homeHeadersStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -87,7 +87,7 @@
 
                 <TextView
                     android:id="@+id/available_text"
-                    style="@style/textFont"
+                    style="@style/homeHeadersStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
